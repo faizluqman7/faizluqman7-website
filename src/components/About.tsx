@@ -17,7 +17,7 @@ const AboutSection = () => (
                         <div className="card-body">
                             <h5 className="card-title">🎓 Education</h5>
                             <p className="card-text">
-                                Studying Computer Science at <strong>The University of Edinburgh</strong> <br/> Graduating in Summer 2026.
+                                Studying Computer Science at <strong>The University of Edinburgh</strong> <br/> Graduating in Summer 2026
                             </p>
                         </div>
                     </div>
@@ -39,7 +39,7 @@ const AboutSection = () => (
                         <div className="card-body">
                             <h5 className="card-title">💡 Interests</h5>
                             <p className="card-text">
-                                Enthusiastic about <strong>software development</strong>, <strong>AI/ML</strong> and learning about the latest technologies.
+                                Enthusiastic about <strong>software development</strong>, <strong>AI/ML</strong> and learning about the latest technologies
                             </p>
                         </div>
                     </div>

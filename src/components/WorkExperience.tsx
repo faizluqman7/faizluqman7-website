@@ -29,7 +29,7 @@ const experiences = [
     company: 'The University of Edinburgh',
     date: 'Sep 2022',
     description: [
-      'BSc (Hons) in Computer Science, expected graduation May 2026.',
+      'BSc (Hons) in Computer Science, expected graduation in May 2026.',
       'Relevant courses: Algorithms, Distributed Systems, Software Engineering, Machine Learning, NLP, Computer Systems, Networks, Software Testing.',
       'On track for First-Class Honours.'
     ],
