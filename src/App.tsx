@@ -11,6 +11,7 @@ import Contact from "./components/Contact.tsx";
 import FloatingBubbles from "./components/Bubbles.tsx";
 import NavBar from "./components/NavBar.tsx";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import WorkExperience from "./components/WorkExperience.tsx";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -43,6 +44,7 @@ function App() {
             <HeroSection />
             <AboutSection />
             <TechSection />
+            <WorkExperience />
             <ProjectsSection />
             <Contact />
 

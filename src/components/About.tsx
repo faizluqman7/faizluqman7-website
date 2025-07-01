@@ -17,8 +17,7 @@ const AboutSection = () => (
                         <div className="card-body">
                             <h5 className="card-title">🎓 Education</h5>
                             <p className="card-text">
-                                Studying Computer Science at <strong>The University of Edinburgh</strong> on a fully-funded
-                                sponsorship by the Malaysian government.
+                                Studying Computer Science at <strong>The University of Edinburgh</strong> <br/> Graduating in Summer 2026.
                             </p>
                         </div>
                     </div>
@@ -29,8 +28,7 @@ const AboutSection = () => (
                         <div className="card-body">
                             <h5 className="card-title">💼 Experiences</h5>
                             <p className="card-text">
-                                Previous software engineering intern at <strong>Keysight Technologies</strong> <br/><br />
-                                Also participated in various projects and hackathons.
+                                Participated in over 5 hackathons. Previous software engineering interns at <strong>Keysight Technologies</strong> and <strong>Pera</strong> (London-based start-up)
                             </p>
                         </div>
                     </div>
