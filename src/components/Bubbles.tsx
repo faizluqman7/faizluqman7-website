@@ -11,7 +11,7 @@ interface Bubble {
 const BubbleBackground = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const bubblesRef = useRef<Bubble[]>([]);
-    const mouse = useRef({ x: -1000, y: -1000 }); // start off-screen
+    const mouse = useRef({ x: -1000, y: -1000 }); // start off-screenn
 
     const createBubble = (canvas: HTMLCanvasElement): Bubble => ({
         x: Math.random() * canvas.width,
