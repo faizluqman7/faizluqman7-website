@@ -1,169 +1,557 @@
 import { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion } from 'framer-motion';
 
+gsap.registerPlugin(ScrollTrigger);
+
 const experiences = [
+  {
+    title: 'BSc Computer Science Graduation',
+    company: 'University of Edinburgh',
+    date: 'July 2026',
+    year: '2026',
+    description: [
+      'Expected graduation with BSc (Hons) Computer Science.',
+      'On track for First-Class Honours.',
+    ],
+    icon: '🎓',
+    accentColor: '#00d4ff',
+    isFuture: true,
+  },
+  {
+    title: 'Code For Good Participant',
+    company: 'JPMorgan Chase',
+    date: 'Oct 2025',
+    year: '2025',
+    description: [
+      'Participated in JPMorgan Chase\'s flagship hackathon, Code For Good in Glasgow, Scotland.',
+      'Built technology solutions for non-profit organizations in a team environment.',
+    ],
+    icon: '💻',
+    accentColor: '#10b981',
+    isFuture: false,
+  },
   {
     title: 'Software Engineering Intern',
     company: 'Pera',
     date: 'Jun 2025 - Aug 2025',
+    year: '2025',
     description: [
-      "Engineered the backend for Becca, a Flask-based system connecting Pera's web presence to an AI core via PostgreSQL.",
-      'Integrated Supabase and Twilio for 2FA and email auth, reducing onboarding time by 65% for 100+ users.',
-      'Collaborated with founders to drive product direction and technical decisions.'
+      "Engineered the backend for Becca, an agent-based AI system helping users connect with each other.",
+      'Collaborated with founders to drive product direction at this London-based startup.',
     ],
-    icon: '💼',
+    icon: '🚀',
+    accentColor: '#7c3aed',
   },
   {
     title: 'Software Engineering Intern',
     company: 'Keysight Technologies',
     date: 'Jun 2024 - Sep 2024',
+    year: '2024',
     description: [
+      'Interned as a Technology Engineer / Software Engineer within the Design & Engineering Department, under the Knowledge Engineering Team',
       'Designed and deployed a scalable approval-based request tracking system for 100+ weekly product service requests.',
       'Engineered a batch data processing pipeline, reducing processing times by over 90%.',
-      'Developed a custom SQL Code Generator Tool for non-technical staff to query a 10,000+ record database.'
     ],
-    icon: '💼',
+    icon: '⚙️',
+    accentColor: '#06b6d4',
   },
   {
-    title: 'Started BSc (Hons) in Computer Science',
-    company: 'The University of Edinburgh',
-    date: 'Sep 2022',
+    title: 'Event Volunteer',
+    company: 'HackTheBurgh X',
+    date: 'Mar 2024',
+    year: '2024',
     description: [
-      'Expected graduation in May 2026.',
-      'Relevant courses: Algorithms, Distributed Systems, Software Engineering, Machine Learning, NLP, Computer Systems, Networks, Software Testing.',
-      'On track for First-Class Honours.'
+      'Volunteered at Scotland\'s largest student-run hackathon.',
+      'Helped organize and support participants throughout the event.',
     ],
-    icon: '🎓',
+    icon: '🤝',
+    accentColor: '#f59e0b',
+  },
+  {
+    title: 'Started BSc (Hons) Computer Science',
+    company: 'University of Edinburgh',
+    date: 'Sep 2022',
+    year: '2022',
+    description: [
+      'Started BSc (Hons) in Computer Science studies at the School of Informatics, University of Edinburgh.',
+      'Relevant Courses: Algorithms & Data Structures, Distributed Systems, Machine Learning, NLP, Software Engineering.',
+      'Recipient of MARA World Top Universities (WTU) Education Sponsorship.',
+    ],
+    icon: '📚',
+    accentColor: '#8b5cf6',
+  },
+  {
+    title: 'Cambridge A-Levels',
+    company: "Taylor's College, Malaysia",
+    date: '2020 - 2021',
+    year: '2021',
+    description: [
+      'Achieved 3A* in Mathematics, Computer Science and Physics.',
+      "Received Taylor's Top Achiever's Award and Distinction Award Scholarship.",
+    ],
+    icon: '🏆',
+    accentColor: '#ec4899',
   },
 ];
 
 const WorkExperience = () => {
-  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
-  const [visible, setVisible] = useState<boolean[]>(Array(experiences.length).fill(false));
+  const containerRef = useRef<HTMLDivElement>(null);
+  const horizontalRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-    itemRefs.current.forEach((ref, idx) => {
-      if (!ref) return;
-      const observer = new window.IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setVisible((prev) => {
-              const updated = [...prev];
-              updated[idx] = true;
-              return updated;
-            });
-            observer.disconnect();
-          }
-        },
-        { threshold: 0.2 }
-      );
-      observer.observe(ref);
-      observers.push(observer);
-    });
-    return () => observers.forEach((obs) => obs.disconnect());
+    // Check mobile on mount
+    setIsMobile(window.innerWidth < 768);
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    if (isMobile) return;
+
+    const container = containerRef.current;
+    const horizontal = horizontalRef.current;
+
+    if (!container || !horizontal) return;
+
+    // Wait for layout to settle
+    const timer = setTimeout(() => {
+      const scrollWidth = horizontal.scrollWidth - window.innerWidth;
+
+      if (scrollWidth <= 0) return;
+
+      const tween = gsap.to(horizontal, {
+        x: -scrollWidth,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: container,
+          pin: true,
+          scrub: 0.5,
+          start: 'top top',
+          end: () => `+=${scrollWidth}`,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+      };
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [isMobile]);
+
+  // Mobile layout
+  if (isMobile) {
+    return (
+      <section
+        id="work-experience"
+        className="section py-5"
+        style={{ minHeight: 'auto', scrollBehavior: 'smooth' }}
+      >
+        <div style={{ width: '90%', maxWidth: '800px', margin: '0 auto', padding: '0 1rem' }}>
+          <h3 className="mb-2 text-center">
+            Professional Timeline
+          </h3>
+          <p style={{ color: 'var(--text-muted)', textAlign: 'center', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+            My journey so far
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {experiences.map((exp, idx) => (
+              <div
+                key={idx}
+                style={{
+                  background: 'var(--bg-card)',
+                  border: `1px solid ${exp.accentColor}30`,
+                  borderRadius: '12px',
+                  padding: '1rem',
+                  borderLeft: `3px solid ${exp.accentColor}`,
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.4rem' }}>
+                  <span style={{ fontSize: '1.25rem' }}>{exp.icon}</span>
+                  <div style={{ flex: 1 }}>
+                    <h5 style={{
+                      color: 'var(--text-primary)',
+                      margin: 0,
+                      fontSize: '0.9rem',
+                      fontWeight: 600,
+                    }}>
+                      {exp.title}
+                    </h5>
+                    <p style={{
+                      color: exp.accentColor,
+                      margin: 0,
+                      fontSize: '0.75rem',
+                      fontWeight: 500,
+                    }}>
+                      @ {exp.company}
+                    </p>
+                  </div>
+                  {exp.isFuture && (
+                    <span style={{
+                      background: exp.accentColor,
+                      color: '#000',
+                      padding: '0.1rem 0.4rem',
+                      borderRadius: '6px',
+                      fontSize: '0.55rem',
+                      fontWeight: 600,
+                    }}>
+                      UPCOMING
+                    </span>
+                  )}
+                </div>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.7rem', marginBottom: '0.4rem' }}>
+                  {exp.date}
+                </p>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {exp.description.slice(0, 2).map((desc, i) => (
+                    <li key={i} style={{
+                      color: 'var(--text-secondary)',
+                      fontSize: '0.75rem',
+                      lineHeight: 1.4,
+                      marginBottom: '0.15rem',
+                    }}>
+                      • {desc}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Desktop horizontal scroll layout
   return (
-    <section id="work-experience" className="section d-flex flex-column justify-content-center align-items-center text-center py-5">
-      <h3 className="mb-4">🕒 Professional Timeline</h3>
-      <ul className="timeline">
-        {[...experiences].reverse().map((exp, idx) => (
-          <motion.li
-            className={`timeline-item d-flex sticky-timeline-item`}
-            key={experiences.length - 1 - idx}
-            ref={el => { itemRefs.current[experiences.length - 1 - idx] = el; }}
-            initial={{ opacity: 0, y: 40 }}
-            animate={visible[experiences.length - 1 - idx] ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: idx * 0.2, ease: 'easeOut' }}
+    <section
+      id="work-experience"
+      ref={containerRef}
+      className="section"
+      style={{
+        height: '100vh',
+        overflow: 'hidden',
+        padding: 0,
+      }}
+    >
+      {/* Header */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '80px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 10,
+          textAlign: 'center',
+        }}
+      >
+        <h3 className="mb-2" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
+          Professional Timeline
+        </h3>
+        <p style={{ color: 'var(--text-muted)', fontSize: 'clamp(0.8rem, 1.5vw, 0.9rem)' }}>
+          Scroll to explore my journey →
+        </p>
+      </div>
+
+      {/* Progress Indicator */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '30px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 10,
+          display: 'flex',
+          gap: '8px',
+        }}
+      >
+        {[...new Set(experiences.map(e => e.year))].sort((a, b) => parseInt(b) - parseInt(a)).map((year, idx) => {
+          const exp = experiences.find(e => e.year === year)!;
+          return (
+            <div
+              key={idx}
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                background: exp.accentColor,
+                boxShadow: `0 0 8px ${exp.accentColor}`,
+                opacity: 0.8,
+              }}
+            />
+          );
+        })}
+      </div>
+
+      {/* Horizontal Scroll Container */}
+      <div
+        ref={horizontalRef}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          height: '100%',
+          paddingTop: '60px',
+          willChange: 'transform',
+        }}
+      >
+        {/* Intro Panel */}
+        <div
+          style={{
+            minWidth: '100vw',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+          }}
+        >
+          <div style={{ textAlign: 'center' }}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              style={{
+                fontSize: 'clamp(4rem, 15vw, 8rem)',
+                marginBottom: '1rem',
+              }}
+            >
+              🚀
+            </motion.div>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}>
+              My professional journey so far
+            </p>
+          </div>
+        </div>
+
+        {/* Experience Cards - Grouped by Year */}
+        {(() => {
+          // Group experiences by year
+          const groupedByYear: { [key: string]: typeof experiences } = {};
+          experiences.forEach(exp => {
+            if (!groupedByYear[exp.year]) {
+              groupedByYear[exp.year] = [];
+            }
+            groupedByYear[exp.year].push(exp);
+          });
+
+          const years = Object.keys(groupedByYear).sort((a, b) => parseInt(b) - parseInt(a));
+
+          return years.map((year) => {
+            const yearExperiences = groupedByYear[year];
+            const primaryColor = yearExperiences[0].accentColor;
+            const isFutureYear = yearExperiences.some(e => e.isFuture);
+
+            return (
+              <div
+                key={year}
+                style={{
+                  minWidth: yearExperiences.length > 1 ? '90vw' : '80vw',
+                  maxWidth: yearExperiences.length > 1 ? '90vw' : '80vw',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0 2vw',
+                  flexShrink: 0,
+                }}
+              >
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  style={{
+                    display: 'flex',
+                    gap: 'clamp(1.5rem, 3vw, 2.5rem)',
+                    alignItems: 'center',
+                    width: '100%',
+                    maxWidth: '1100px',
+                  }}
+                >
+                  {/* Year */}
+                  <div
+                    style={{
+                      fontSize: 'clamp(3rem, 8vw, 6rem)',
+                      fontWeight: 900,
+                      color: primaryColor,
+                      textShadow: `0 0 40px ${primaryColor}30`,
+                      lineHeight: 1,
+                      minWidth: 'clamp(80px, 12vw, 130px)',
+                      textAlign: 'center',
+                      opacity: isFutureYear ? 0.7 : 1,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {year}
+                  </div>
+
+                  {/* Cards Container */}
+                  <div style={{
+                    display: 'flex',
+                    gap: '1rem',
+                    flex: 1,
+                    flexWrap: yearExperiences.length > 2 ? 'wrap' : 'nowrap',
+                  }}>
+                    {yearExperiences.map((exp, expIdx) => (
+                      <div
+                        key={expIdx}
+                        style={{
+                          background: 'var(--bg-card)',
+                          backdropFilter: 'blur(20px)',
+                          border: `1px solid ${exp.accentColor}25`,
+                          borderRadius: '16px',
+                          padding: 'clamp(0.75rem, 1.5vw, 1.25rem)',
+                          flex: yearExperiences.length === 1 ? 1 : '1 1 45%',
+                          minWidth: yearExperiences.length > 1 ? '280px' : 'auto',
+                          boxShadow: `0 0 20px ${exp.accentColor}10`,
+                          position: 'relative',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {/* Glow accent */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '3px',
+                            height: '100%',
+                            background: `linear-gradient(to bottom, ${exp.accentColor}, transparent)`,
+                            borderRadius: '3px 0 0 3px',
+                          }}
+                        />
+
+                        {/* Future badge */}
+                        {exp.isFuture && (
+                          <span
+                            style={{
+                              position: 'absolute',
+                              top: '0.75rem',
+                              right: '0.75rem',
+                              background: exp.accentColor,
+                              color: '#000',
+                              padding: '0.15rem 0.5rem',
+                              borderRadius: '10px',
+                              fontSize: '0.6rem',
+                              fontWeight: 600,
+                            }}
+                          >
+                            UPCOMING
+                          </span>
+                        )}
+
+                        {/* Icon */}
+                        <div style={{ fontSize: 'clamp(1rem, 2vw, 1.5rem)', marginBottom: '0.4rem' }}>
+                          {exp.icon}
+                        </div>
+
+                        {/* Title */}
+                        <h4
+                          style={{
+                            color: 'var(--text-primary)',
+                            fontWeight: 700,
+                            fontSize: 'clamp(0.85rem, 1.5vw, 1.1rem)',
+                            marginBottom: '0.15rem',
+                          }}
+                        >
+                          {exp.title}
+                        </h4>
+
+                        {/* Company */}
+                        <div
+                          style={{
+                            color: exp.accentColor,
+                            fontWeight: 600,
+                            fontSize: 'clamp(0.75rem, 1.3vw, 0.85rem)',
+                            marginBottom: '0.2rem',
+                          }}
+                        >
+                          @ {exp.company}
+                        </div>
+
+                        {/* Date */}
+                        <div
+                          style={{
+                            color: 'var(--text-muted)',
+                            fontSize: 'clamp(0.65rem, 1.1vw, 0.75rem)',
+                            marginBottom: '0.5rem',
+                          }}
+                        >
+                          {exp.date}
+                        </div>
+
+                        {/* Description - show fewer items when grouped */}
+                        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                          {exp.description.slice(0, yearExperiences.length > 1 ? 2 : 3).map((desc, i) => (
+                            <li
+                              key={i}
+                              style={{
+                                color: 'var(--text-secondary)',
+                                marginBottom: '0.3rem',
+                                paddingLeft: '0.9rem',
+                                position: 'relative',
+                                lineHeight: 1.35,
+                                fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)',
+                              }}
+                            >
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  left: 0,
+                                  color: exp.accentColor,
+                                }}
+                              >
+                                →
+                              </span>
+                              {desc}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+            );
+          });
+        })()}
+
+        {/* End Panel */}
+        <div
+          style={{
+            minWidth: '50vw',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
             style={{
-              pointerEvents: visible[experiences.length - 1 - idx] ? 'auto' : 'none',
-              zIndex: idx + 1,
-              top: `calc(64px + ${idx * 80}px)`, // 64px navbar height offset
-              width: '100%',
+              textAlign: 'center',
+              color: 'var(--text-secondary)',
             }}
           >
-            <div className="timeline-icon">{exp.icon}</div>
-            <div className="timeline-content text-start ms-3">
-              <h5 className="mb-1">{exp.title} <span className="text-muted" style={{ fontSize: '0.9em' }}>@ {exp.company}</span></h5>
-              <div className="text-primary mb-2" style={{ fontSize: '0.95em' }}>{exp.date}</div>
-              <ul className="mb-0">
-                {exp.description.map((desc, i) => (
-                  <li key={i}>{desc}</li>
-                ))}
-              </ul>
-            </div>
-          </motion.li>
-        ))}
-      </ul>
-      <style>{`
-        .timeline {
-          list-style: none;
-          padding: 0;
-          position: relative;
-          min-height: 600px;
-        }
-        .timeline:before {
-          content: '';
-          position: absolute;
-          left: 32px;
-          top: 0;
-          bottom: 0;
-          width: 4px;
-          background: #0d6efd22;
-          border-radius: 2px;
-        }
-        .timeline-item {
-          position: relative;
-          margin-bottom: 2.5rem;
-          align-items: flex-start;
-          width: 100%;
-        }
-        .sticky-timeline-item {
-          position: sticky;
-          /* top is set inline per item */
-          background: #f8f9fa;
-          box-shadow: 0 4px 16px #0d6efd22;
-          border-radius: 8px;
-          transition: box-shadow 0.3s;
-        }
-        .timeline-icon {
-          min-width: 48px;
-          min-height: 48px;
-          width: 48px;
-          height: 48px;
-          background: #fff;
-          border: 3px solid #0d6efd;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: clamp(1.2rem, 4vw, 1.7rem);
-          position: relative;
-          z-index: 1;
-          box-shadow: 0 2px 8px #0d6efd22;
-        }
-        .timeline-content {
-          background: #f8f9fa;
-          border-radius: 8px;
-          padding: 1rem 1.5rem;
-          box-shadow: 0 2px 8px #0d6efd11;
-          min-width: 220px;
-          width: 100%;
-          max-width: none;
-        }
-        @media (max-width: 600px) {
-          .timeline-content { padding: 0.75rem 1rem; min-width: 0; width: 100%; }
-          .timeline:before { left: 24px; }
-          .timeline-icon {
-            min-width: 36px;
-            min-height: 36px;
-            width: 36px;
-            height: 36px;
-            font-size: clamp(1rem, 6vw, 1.3rem);
-          }
-        }
-      `}</style>
+            <div style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', marginBottom: '0.75rem' }}>🌟</div>
+            <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}>And the journey continues...</p>
+          </motion.div>
+        </div>
+      </div>
     </section>
   );
 };

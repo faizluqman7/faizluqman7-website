@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.4.2",
     "@tsparticles/engine": "^3.8.1",
     "@tsparticles/react": "^3.0.0",
+    "@types/three": "^0.182.0",
     "bootstrap": "^5.3.6",
     "framer-motion": "^12.10.5",
     "gsap": "^3.13.0",
@@ -19,6 +22,7 @@
     "react-dom": "^19.1.0",
     "react-simple-typewriter": "^5.0.1",
     "react-tsparticles": "^2.12.2",
+    "three": "^0.182.0",
     "tsparticles": "^3.8.1",
     "tsparticles-engine": "^2.12.0"
   },

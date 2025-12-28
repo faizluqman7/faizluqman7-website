@@ -1,4 +1,4 @@
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,7 +8,7 @@ import AboutSection from "./components/About.tsx";
 import TechSection from "./components/Tech.tsx";
 import ProjectsSection from "./components/ProjectsSection.tsx";
 import Contact from "./components/Contact.tsx";
-import FloatingBubbles from "./components/Bubbles.tsx";
+import ThreeBackground from "./components/ThreeBackground.tsx";
 import NavBar from "./components/NavBar.tsx";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import WorkExperience from "./components/WorkExperience.tsx";
@@ -16,7 +16,6 @@ import WorkExperience from "./components/WorkExperience.tsx";
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
-
 
     useEffect(() => {
         gsap.utils.toArray<HTMLElement>(".section").forEach((section) => {
@@ -40,7 +39,7 @@ function App() {
     return (
         <main className="fullpage-container">
             <NavBar />
-            <FloatingBubbles />
+            <ThreeBackground />
             <HeroSection />
             <AboutSection />
             <TechSection />
