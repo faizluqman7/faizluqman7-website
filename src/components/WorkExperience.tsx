@@ -20,6 +20,19 @@ const experiences = [
     isFuture: true,
   },
   {
+    title: 'Lab Demonstrator',
+    company: 'University of Edinburgh',
+    date: 'Oct 2025 - Dec 2025',
+    year: '2025',
+    description: [
+      'Demonstrated and supported students in labs for the Informatics Large Practical (ILP) course.',
+      'Helped students with their assignments and provided guidance on best practices.',
+    ],
+    icon: '💻',
+    accentColor: '#bd1797ff',
+    isFuture: false,
+  },
+  {
     title: 'Code For Good Participant',
     company: 'JPMorgan Chase',
     date: 'Oct 2025',
