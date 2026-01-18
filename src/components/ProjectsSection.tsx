@@ -30,7 +30,7 @@ const ProjectsSection = () => {
                             fontSize: 'clamp(0.9rem, 2vw, 1rem)',
                         }}
                     >
-                        02.
+                        03.
                     </span>
                     <h3
                         style={{

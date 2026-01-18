@@ -24,6 +24,7 @@ const NavBar = () => {
     const navItems = [
         { href: '#', label: 'home' },
         { href: '#about-me', label: 'about' },
+        { href: '#work-experience', label: 'journey' },
         { href: '#projects', label: 'projects' },
         { href: '#contact', label: 'contact' },
     ];
