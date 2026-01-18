@@ -2,7 +2,11 @@ import { useState } from 'react';
 import { motion } from "framer-motion";
 import TextReveal from './TextReveal';
 
-const HeroSection = () => {
+interface HeroSectionProps {
+    onOpenGraph?: () => void;
+}
+
+const HeroSection = ({ onOpenGraph }: HeroSectionProps) => {
     const [showContent, setShowContent] = useState(false);
 
     return (
@@ -214,6 +218,44 @@ const HeroSection = () => {
                     />
                 </motion.div>
             </motion.div>
+
+            {/* Explore Graph Button - positioned in hero */}
+            {onOpenGraph && (
+                <motion.button
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 2 }}
+                    onClick={onOpenGraph}
+                    whileHover={{
+                        scale: 1.05,
+                        boxShadow: '0 0 20px rgba(255, 107, 53, 0.3)',
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                    style={{
+                        position: 'absolute',
+                        top: '100px',
+                        right: '24px',
+                        zIndex: 100,
+                        padding: '10px 16px',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
+                        fontFamily: 'var(--font-mono)',
+                        borderRadius: '8px',
+                        background: 'var(--glass-bg)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid var(--accent-secondary, #FF6B35)',
+                        color: 'var(--accent-secondary, #FF6B35)',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+                        transition: 'all 0.3s ease',
+                    }}
+                >
+                    <span style={{ fontSize: '1rem' }}>🔍</span>
+                </motion.button>
+            )}
 
             {/* CSS for responsive grid */}
             <style>{`

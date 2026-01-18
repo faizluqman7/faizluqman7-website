@@ -487,10 +487,17 @@ function CameraController({ viewMode }: { viewMode: '2d' | '3d' }) {
 }
 
 // Main scene component
-function GraphScene({ viewMode }: { viewMode: '2d' | '3d' }) {
+function GraphScene({ viewMode, onClearSelection }: { viewMode: '2d' | '3d'; onClearSelection?: () => void }) {
     const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
     const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
     const [isDark, setIsDark] = useState(false);
+
+    // Clear selection when tapping outside (for mobile)
+    const handleBackgroundClick = useCallback(() => {
+        setSelectedNode(null);
+        setHoveredNode(null);
+        onClearSelection?.();
+    }, [onClearSelection]);
 
     const allNodes = useMemo(() => getAllNodes(), []);
     const positions3D = useMemo(() => generateNodePositions(allNodes), [allNodes]);
@@ -558,6 +565,15 @@ function GraphScene({ viewMode }: { viewMode: '2d' | '3d' }) {
 
     return (
         <>
+            {/* Invisible background plane to catch clicks outside nodes */}
+            <mesh
+                position={[0, 0, -10]}
+                onClick={handleBackgroundClick}
+                onPointerDown={(e) => e.stopPropagation()}
+            >
+                <planeGeometry args={[500, 500]} />
+                <meshBasicMaterial visible={false} />
+            </mesh>
             <color attach="background" args={[bgColor]} />
             <ambientLight intensity={0.5} />
 
@@ -877,7 +893,7 @@ const InteractiveGraph = ({ isOpen, onClose }: InteractiveGraphProps) => {
                         )}
                     </motion.div>
 
-                    {/* Legend */}
+                    {/* Legend - positioned for mobile */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -885,14 +901,15 @@ const InteractiveGraph = ({ isOpen, onClose }: InteractiveGraphProps) => {
                         transition={{ delay: 0.4 }}
                         style={{
                             position: 'absolute',
-                            bottom: '24px',
-                            left: '24px',
+                            bottom: '80px',
+                            left: '12px',
                             background: 'var(--bg-secondary, rgba(20, 20, 30, 0.9))',
                             backdropFilter: 'blur(10px)',
                             border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.1))',
                             borderRadius: '12px',
-                            padding: '16px',
-                            fontSize: '0.75rem',
+                            padding: '12px',
+                            fontSize: '0.7rem',
+                            maxWidth: 'calc(100vw - 24px)',
                         }}
                     >
                         <div style={{
