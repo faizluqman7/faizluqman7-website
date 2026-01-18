@@ -2,6 +2,7 @@ export interface Project {
     title: string;
     description: string[];
     link?: string;
+    demoLink?: string;
     date?: string;
     tech?: string[];
     isOngoing?: boolean;
@@ -20,11 +21,13 @@ export const projects: Project[] = [
             'JWT-based auth with PostgreSQL reduced login times by 50%.',
         ],
         link: 'https://github.com/faizluqman7/courseworkbuddy',
-        date: '2025',
+        demoLink: 'https://courseworkbuddy.faizluqman.com',
+        date: '2026',
         tech: ['React', 'TypeScript', 'PostgreSQL', 'LangChain', 'Qdrant'],
         image: '/courseworkbuddy.png',
         isHighlighted: true,
         isFeatured: true,
+        isOngoing: true,
     },
     // FEATURED PROJECTS (from CV)
     {
@@ -73,6 +76,7 @@ export const projects: Project[] = [
             'Achieved consistent results in under 1.5 seconds with optimized API calls.',
         ],
         link: 'https://github.com/faizluqman7',
+        demoLink: 'https://cardgpt.faizluqman.com',
         date: 'Jan 2025 - Mar 2025',
         tech: ['React', 'Flask', 'Gemini API', 'Python'],
     },

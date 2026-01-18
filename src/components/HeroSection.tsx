@@ -120,8 +120,7 @@ const HeroSection = () => {
                         }}
                     >
                         Final year Computer Science student at The University of Edinburgh.
-                        Passionate about full-stack development, making iOS apps, and
-                        building software that makes a difference.
+                        Passionate about full-stack development, and building software that makes a difference.
                     </motion.p>
 
                     {/* CTA Buttons */}

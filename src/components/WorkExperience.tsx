@@ -75,6 +75,8 @@ const experiences = [
     icon: '🚀',
     accentColor: '#7c3aed',
     category: 'work',
+    logo: '/pera.jpg',
+    link: 'https://www.itspera.com/',
   },
   {
     title: 'Software Engineering Intern',
@@ -90,6 +92,8 @@ const experiences = [
     icon: '⚙️',
     accentColor: '#06b6d4',
     category: 'work',
+    logo: '/keysight.png',
+    link: 'https://www.keysight.com/us/en/home.html',
   },
   {
     title: 'Event Volunteer',
@@ -153,28 +157,31 @@ const WorkExperience = () => {
     if (!container || !horizontal) return;
 
     const timer = setTimeout(() => {
-      const scrollWidth = horizontal.scrollWidth - window.innerWidth;
-      if (scrollWidth <= 0) return;
+      // Use functional values for responsiveness
+      const getScrollAmount = () => -(horizontal.scrollWidth - window.innerWidth);
 
       const tween = gsap.to(horizontal, {
-        x: -scrollWidth,
+        x: getScrollAmount,
         ease: 'none',
         scrollTrigger: {
           trigger: container,
           pin: true,
-          scrub: 0.5,
+          scrub: 1,
           start: 'top top',
-          end: () => `+=${scrollWidth}`,
+          end: () => `+=${horizontal.scrollWidth - window.innerWidth}`,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       });
 
+      // Refresh ScrollTrigger to ensure calculations are correct after render
+      ScrollTrigger.refresh();
+
       return () => {
         tween.scrollTrigger?.kill();
         tween.kill();
       };
-    }, 100);
+    }, 500); // Increased timeout slightly to ensure layout is settled
 
     return () => clearTimeout(timer);
   }, [isMobile]);
@@ -201,7 +208,7 @@ const WorkExperience = () => {
               color: 'var(--accent-primary)',
               fontSize: 'clamp(0.9rem, 2vw, 1rem)',
             }}>
-              03.
+              02.
             </span>
             <h3 style={{ margin: 0, fontFamily: 'var(--font-serif)' }}>
               My Journey
@@ -229,7 +236,27 @@ const WorkExperience = () => {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.4rem' }}>
-                  <span style={{ fontSize: '1.25rem' }}>{exp.icon}</span>
+                  {(exp as any).logo ? (
+                    <div style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '8px',
+                      overflow: 'hidden',
+                      background: '#fff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1px solid var(--border-subtle)'
+                    }}>
+                      <img
+                        src={(exp as any).logo}
+                        alt={`${exp.company} logo`}
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                      />
+                    </div>
+                  ) : (
+                    <span style={{ fontSize: '1.25rem' }}>{exp.icon}</span>
+                  )}
                   <div style={{ flex: 1 }}>
                     <h5 style={{
                       fontFamily: 'var(--font-sans)',
@@ -240,14 +267,43 @@ const WorkExperience = () => {
                     }}>
                       {exp.title}
                     </h5>
-                    <p style={{
-                      color: exp.accentColor,
-                      margin: 0,
-                      fontSize: '0.75rem',
-                      fontWeight: 500,
-                    }}>
-                      @ {exp.company}
-                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                      {/* Company Name & Link */}
+                      {(exp as any).link ? (
+                        <a
+                          href={(exp as any).link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            color: exp.accentColor,
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            textDecoration: 'none',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            lineHeight: 1, // Fix vertical alignment
+                          }}
+                          onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                          onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
+                        >
+                          @ {exp.company}
+                          <span style={{ fontSize: '0.7em' }}>↗</span>
+                        </a>
+                      ) : (
+                        <p style={{
+                          color: exp.accentColor,
+                          margin: 0,
+                          fontSize: '0.75rem',
+                          fontWeight: 500,
+                          display: 'flex',
+                          alignItems: 'center',
+                          lineHeight: 1,
+                        }}>
+                          @ {exp.company}
+                        </p>
+                      )}
+                    </div>
                   </div>
                   {exp.isFuture && (
                     <span style={{
@@ -333,7 +389,7 @@ const WorkExperience = () => {
             color: 'var(--accent-primary)',
             fontSize: 'clamp(0.9rem, 2vw, 1rem)',
           }}>
-            03.
+            02.
           </span>
           <h3 style={{ margin: 0, fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
             My Journey
@@ -530,10 +586,32 @@ const WorkExperience = () => {
                           )}
                         </div>
 
-                        {/* Icon */}
-                        <div style={{ fontSize: 'clamp(1rem, 2vw, 1.5rem)', marginBottom: '0.4rem' }}>
-                          {exp.icon}
-                        </div>
+                        {/* Icon or Logo */}
+                        {(exp as any).logo ? (
+                          <div style={{
+                            margin: '0 auto 0.5rem auto',
+                            width: 'clamp(2.5rem, 4vw, 3.5rem)',
+                            height: 'clamp(2.5rem, 4vw, 3.5rem)',
+                            borderRadius: '12px',
+                            overflow: 'hidden',
+                            background: '#fff',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            border: '1px solid var(--border-subtle)',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+                          }}>
+                            <img
+                              src={(exp as any).logo}
+                              alt={`${exp.company} logo`}
+                              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                            />
+                          </div>
+                        ) : (
+                          <div style={{ fontSize: 'clamp(1rem, 2vw, 1.5rem)', marginBottom: '0.4rem' }}>
+                            {exp.icon}
+                          </div>
+                        )}
 
                         {/* Title */}
                         <h4 style={{
@@ -552,8 +630,33 @@ const WorkExperience = () => {
                           fontWeight: 600,
                           fontSize: 'clamp(0.75rem, 1.3vw, 0.85rem)',
                           marginBottom: '0.2rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center', // Center align company name
+                          gap: '0.5rem'
                         }}>
-                          @ {exp.company}
+                          {/* Company Name & Link */}
+                          {(exp as any).link ? (
+                            <a
+                              href={(exp as any).link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                color: 'inherit',
+                                textDecoration: 'none',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.25rem'
+                              }}
+                              onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                              onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
+                            >
+                              @ {exp.company}
+                              <span style={{ fontSize: '0.8em', opacity: 0.8 }}>↗</span>
+                            </a>
+                          ) : (
+                            <span style={{ display: 'flex', alignItems: 'center' }}>@ {exp.company}</span>
+                          )}
                         </div>
 
                         {/* Date */}
