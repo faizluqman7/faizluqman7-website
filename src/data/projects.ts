@@ -1,4 +1,50 @@
-export const projects = [
+export interface Project {
+    title: string;
+    description: string[];
+    link?: string;
+    date?: string;
+    tech?: string[];
+    isOngoing?: boolean;
+    isFeatured?: boolean;
+}
+
+export const projects: Project[] = [
+    // FEATURED PROJECTS (from CV)
+    {
+        title: '🔗 Distributed Compute Cluster & Storage Engine',
+        description: [
+            'Engineered a distributed compute engine in Python using gRPC, processing 3.5M+ primes/sec across nodes.',
+            'Architected a custom AFS-inspired distributed file system with client-side caching and Primary-Backup replication.',
+            'Achieved >99.9% availability during single-node failures.',
+        ],
+        date: '2025',
+        tech: ['Python', 'gRPC', 'Distributed Systems'],
+        isFeatured: true,
+    },
+    {
+        title: '📚 AI-Driven Coursework Planning System',
+        description: [
+            'Developed a study platform using React + FastAPI with multimodal RAG using Gemini 2.0 + LangChain.',
+            'Integrated Qdrant Cloud for efficient multimodal semantic retrieval with <1s latency.',
+            'JWT-based auth with PostgreSQL reduced login times by 50%.',
+        ],
+        link: 'https://github.com/faizluqman7',
+        date: '2025',
+        tech: ['React', 'TypeScript', 'PostgreSQL', 'LangChain', 'Qdrant'],
+        isFeatured: true,
+    },
+    {
+        title: '⚡ Sparse Matrix & Tensor Multiplication Engine',
+        description: [
+            'Implemented distributed sparse matrix engine using Apache Spark with 5 storage formats.',
+            'Achieved 28-36x compute speedup using CSF compression vs baseline formats.',
+            'Kernel fusion combining operations in single pass resulted in 6.4x speedup.',
+        ],
+        date: '2025',
+        tech: ['Scala', 'Apache Spark', 'Distributed Computing'],
+        isFeatured: true,
+    },
+    // ONGOING PROJECTS
     {
         title: '❤️ HealthMY iOS App',
         description: [
@@ -12,6 +58,7 @@ export const projects = [
         tech: ['Swift', 'SwiftUI', 'CoreData', 'HealthKit', 'iOS'],
         isOngoing: true,
     },
+    // OTHER NOTABLE PROJECTS
     {
         title: '🤖 CardGPT - AI Card Generator',
         description: [
@@ -68,26 +115,5 @@ export const projects = [
         link: 'https://github.com/faizluqman7',
         date: 'Feb 2024',
         tech: ['HTML', 'CSS', 'JavaScript'],
-    },
-    {
-        title: '📦 Product Management System',
-        description: [
-            'Comprehensive product manager program using Python for inventory tracking.',
-            'Implemented object-oriented programming and CSV file handling.',
-            'Achieved High Distinction (91%) as part of RMIT Global Summer School.',
-        ],
-        date: 'Sep 2021 - Oct 2021',
-        tech: ['Python', 'OOP', 'File I/O'],
-    },
-    {
-        title: '🏙️ Sustainable Cities Portal',
-        description: [
-            'Informative web portal to promote sustainable living with energy consumption calculator.',
-            'Live weather forecast display using OpenWeatherMap API.',
-            'Placed 13th at Taylor\'s University ImagineHack Hackathon 2021.',
-        ],
-        link: 'https://faizluqman7.github.io/imaginehack2021/',
-        date: 'Jun 2021',
-        tech: ['HTML', 'CSS', 'JavaScript', 'API'],
     },
 ];

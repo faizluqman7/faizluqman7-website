@@ -1,171 +1,211 @@
-import { useRef, useMemo, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useRef, useMemo, useEffect, useState } from 'react';
+import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
 
-// Global mouse position that can be accessed by all components
+// Global mouse position
 const mouseState = { x: 0.5, y: 0.5 };
 
-interface ParticleFieldProps {
-    count?: number;
+// Skills with their icon URLs (using devicons CDN)
+const skills = [
+    { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
+    { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
+    { name: 'Swift', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg' },
+    { name: 'Java', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
+    { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
+    { name: 'Node.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' },
+    { name: 'FastAPI', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg' },
+    { name: 'Spring', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg' },
+    { name: 'Docker', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
+    { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
+    { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
+    { name: 'TensorFlow', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg' },
+    { name: 'Scala', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scala/scala-original.svg' },
+    { name: 'Linux', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg' },
+    { name: 'AWS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg' },
+    { name: 'Redis', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg' },
+    { name: 'GraphQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg' },
+    { name: 'Firebase', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg' },
+];
+
+interface Node {
+    position: THREE.Vector3;
+    basePosition: THREE.Vector3;
+    skillIndex: number;
+    connections: number[];
 }
 
-// Personalized shapes - mix of footballs (icosahedrons), code brackets, and Apple-inspired spheres
-function ParticleField({ count = 60 }: ParticleFieldProps) {
-    const meshRef = useRef<THREE.InstancedMesh>(null);
-    const dummy = useMemo(() => new THREE.Object3D(), []);
+// Single skill icon sprite
+function SkillIcon({ iconUrl, position, opacity }: { iconUrl: string; position: [number, number, number]; opacity: number }) {
+    const texture = useLoader(THREE.TextureLoader, iconUrl);
 
-    // Generate initial positions and velocities
-    const particles = useMemo(() => {
-        const temp = [];
-        for (let i = 0; i < count; i++) {
+    return (
+        <sprite position={position} scale={[0.8, 0.8, 0.8]}>
+            <spriteMaterial
+                map={texture}
+                transparent
+                opacity={opacity}
+                depthTest={false}
+            />
+        </sprite>
+    );
+}
+
+// Network Graph with skill icons
+function NetworkGraph({ nodeCount = 18 }: { nodeCount?: number }) {
+    const groupRef = useRef<THREE.Group>(null);
+    const linesRef = useRef<THREE.LineSegments>(null);
+    const [isDark, setIsDark] = useState(false);
+
+    // Check theme
+    useEffect(() => {
+        const checkTheme = () => {
+            setIsDark(document.documentElement.getAttribute('data-theme') === 'dark');
+        };
+        checkTheme();
+        const observer = new MutationObserver(checkTheme);
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        return () => observer.disconnect();
+    }, []);
+
+    // Generate nodes with connections
+    const nodes = useMemo(() => {
+        const temp: Node[] = [];
+        const connectionDistance = 8;
+
+        for (let i = 0; i < nodeCount; i++) {
+            const x = (Math.random() - 0.5) * 30;
+            const y = (Math.random() - 0.5) * 25;
+            const z = (Math.random() - 0.5) * 10 - 8;
+
             temp.push({
-                position: new THREE.Vector3(
-                    (Math.random() - 0.5) * 25,
-                    (Math.random() - 0.5) * 25,
-                    (Math.random() - 0.5) * 15 - 5
-                ),
-                basePosition: new THREE.Vector3(
-                    (Math.random() - 0.5) * 25,
-                    (Math.random() - 0.5) * 25,
-                    (Math.random() - 0.5) * 15 - 5
-                ),
-                velocity: new THREE.Vector3(
-                    (Math.random() - 0.5) * 0.008,
-                    (Math.random() - 0.5) * 0.008,
-                    (Math.random() - 0.5) * 0.004
-                ),
-                scale: Math.random() * 0.25 + 0.08,
-                rotationSpeed: (Math.random() - 0.5) * 0.015,
-                phaseOffset: Math.random() * Math.PI * 2,
+                position: new THREE.Vector3(x, y, z),
+                basePosition: new THREE.Vector3(x, y, z),
+                skillIndex: i % skills.length,
+                connections: [],
             });
         }
+
+        // Calculate connections (k-nearest neighbors)
+        for (let i = 0; i < temp.length; i++) {
+            for (let j = i + 1; j < temp.length; j++) {
+                const dist = temp[i].basePosition.distanceTo(temp[j].basePosition);
+                if (dist < connectionDistance) {
+                    temp[i].connections.push(j);
+                }
+            }
+        }
+
         return temp;
-    }, [count]);
+    }, [nodeCount]);
+
+    // Generate line geometry for connections
+    const lineGeometry = useMemo(() => {
+        const positions: number[] = [];
+        nodes.forEach((node) => {
+            node.connections.forEach((j) => {
+                positions.push(
+                    node.position.x, node.position.y, node.position.z,
+                    nodes[j].position.x, nodes[j].position.y, nodes[j].position.z
+                );
+            });
+        });
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        return geometry;
+    }, [nodes]);
 
     useFrame((state) => {
-        if (!meshRef.current) return;
-
         const time = state.clock.getElapsedTime();
+        const mouseX = (mouseState.x - 0.5) * 15;
+        const mouseY = (mouseState.y - 0.5) * -10;
 
-        // Convert mouse to 3D world coordinates
-        const mouseX = (mouseState.x - 0.5) * 20;
-        const mouseY = (mouseState.y - 0.5) * -15;
-
-        particles.forEach((particle, i) => {
-            // Calculate distance from mouse
-            const dx = particle.position.x - mouseX;
-            const dy = particle.position.y - mouseY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            // Repulsion effect - particles move away from cursor
-            const repulsionRadius = 6;
-            if (dist < repulsionRadius && dist > 0.1) {
-                const force = (repulsionRadius - dist) / repulsionRadius;
-                const angle = Math.atan2(dy, dx);
-                particle.position.x += Math.cos(angle) * force * 0.15;
-                particle.position.y += Math.sin(angle) * force * 0.15;
-            }
-
+        // Update node positions
+        nodes.forEach((node) => {
             // Gentle floating motion
-            particle.position.x += particle.velocity.x + Math.sin(time * 0.5 + particle.phaseOffset) * 0.003;
-            particle.position.y += particle.velocity.y + Math.cos(time * 0.3 + particle.phaseOffset) * 0.003;
-            particle.position.z += particle.velocity.z;
+            node.position.x = node.basePosition.x + Math.sin(time * 0.3 + node.basePosition.x) * 0.3;
+            node.position.y = node.basePosition.y + Math.cos(time * 0.2 + node.basePosition.y) * 0.3;
+            node.position.z = node.basePosition.z + Math.sin(time * 0.15) * 0.1;
 
-            // Slowly drift back toward base position
-            particle.position.x += (particle.basePosition.x - particle.position.x) * 0.001;
-            particle.position.y += (particle.basePosition.y - particle.position.y) * 0.001;
-
-            // Wrap around boundaries
-            if (particle.position.x > 15) particle.position.x = -15;
-            if (particle.position.x < -15) particle.position.x = 15;
-            if (particle.position.y > 15) particle.position.y = -15;
-            if (particle.position.y < -15) particle.position.y = 15;
-            if (particle.position.z > 2) particle.position.z = -12;
-            if (particle.position.z < -12) particle.position.z = 2;
-
-            // Set transform
-            dummy.position.copy(particle.position);
-            dummy.rotation.x = time * particle.rotationSpeed;
-            dummy.rotation.y = time * particle.rotationSpeed * 0.7;
-            dummy.scale.setScalar(particle.scale);
-            dummy.updateMatrix();
-
-            meshRef.current!.setMatrixAt(i, dummy.matrix);
+            // Subtle mouse influence
+            const dx = node.position.x - mouseX;
+            const dy = node.position.y - mouseY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 8 && dist > 0.1) {
+                const force = (8 - dist) / 8 * 0.3;
+                node.position.x += (dx / dist) * force;
+                node.position.y += (dy / dist) * force;
+            }
         });
 
-        meshRef.current.instanceMatrix.needsUpdate = true;
+        // Update line positions
+        if (linesRef.current) {
+            const positions = linesRef.current.geometry.attributes.position.array as Float32Array;
+            let idx = 0;
+            nodes.forEach((node) => {
+                node.connections.forEach((j) => {
+                    positions[idx++] = node.position.x;
+                    positions[idx++] = node.position.y;
+                    positions[idx++] = node.position.z;
+                    positions[idx++] = nodes[j].position.x;
+                    positions[idx++] = nodes[j].position.y;
+                    positions[idx++] = nodes[j].position.z;
+                });
+            });
+            linesRef.current.geometry.attributes.position.needsUpdate = true;
+        }
+
+        // Subtle group rotation based on mouse
+        if (groupRef.current) {
+            groupRef.current.rotation.y = (mouseState.x - 0.5) * 0.1;
+            groupRef.current.rotation.x = (mouseState.y - 0.5) * 0.05;
+        }
     });
+
+    const lineColor = isDark ? '#FF6B35' : '#FF6B35';
+    const iconOpacity = isDark ? 0.80 : 0.50; // Subtle opacity
 
     return (
-        <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
-            <icosahedronGeometry args={[1, 1]} />
-            <meshBasicMaterial
-                color="#4a9eff"
-                transparent
-                opacity={0.12}
-                wireframe
-            />
-        </instancedMesh>
-    );
-}
+        <group ref={groupRef}>
+            {/* Connection lines */}
+            <lineSegments ref={linesRef} geometry={lineGeometry}>
+                <lineBasicMaterial color={lineColor} transparent opacity={isDark ? 0.60 : 0.40} linewidth={1} />
+            </lineSegments>
 
-// Floating code brackets - personalized for CS student
-function CodeBrackets() {
-    const group1Ref = useRef<THREE.Group>(null);
-    const group2Ref = useRef<THREE.Group>(null);
-
-    useFrame((state) => {
-        const time = state.clock.getElapsedTime();
-        const mouseOffsetX = (mouseState.x - 0.5) * 2;
-        const mouseOffsetY = (mouseState.y - 0.5) * -2;
-
-        if (group1Ref.current) {
-            group1Ref.current.rotation.z = Math.sin(time * 0.2) * 0.1;
-            group1Ref.current.position.x = -8 + mouseOffsetX * 0.5;
-            group1Ref.current.position.y = 2 + Math.sin(time * 0.3) * 0.5 + mouseOffsetY * 0.3;
-        }
-        if (group2Ref.current) {
-            group2Ref.current.rotation.z = Math.sin(time * 0.25 + 1) * -0.1;
-            group2Ref.current.position.x = 8 + mouseOffsetX * 0.5;
-            group2Ref.current.position.y = -2 + Math.cos(time * 0.35) * 0.5 + mouseOffsetY * 0.3;
-        }
-    });
-
-    // Simple bracket using boxes
-    const BracketShape = ({ flip = false }: { flip?: boolean }) => (
-        <group scale={[flip ? -1 : 1, 1, 1]}>
-            <mesh position={[0.25, 1.46, 0]}>
-                <boxGeometry args={[0.5, 0.08, 0.08]} />
-                <meshBasicMaterial color="#00d4ff" transparent opacity={0.4} />
-            </mesh>
-            <mesh position={[0, 0, 0]}>
-                <boxGeometry args={[0.08, 3, 0.08]} />
-                <meshBasicMaterial color="#00d4ff" transparent opacity={0.4} />
-            </mesh>
-            <mesh position={[0.25, -1.46, 0]}>
-                <boxGeometry args={[0.5, 0.08, 0.08]} />
-                <meshBasicMaterial color="#00d4ff" transparent opacity={0.4} />
-            </mesh>
+            {/* Nodes with skill icons */}
+            {nodes.map((node, i) => (
+                <group key={i} position={[node.position.x, node.position.y, node.position.z]}>
+                    {/* Small node dot */}
+                    <mesh>
+                        <sphereGeometry args={[0.06, 8, 8]} />
+                        <meshBasicMaterial color={lineColor} transparent opacity={isDark ? 0.3 : 0.2} />
+                    </mesh>
+                    {/* Skill icon */}
+                    <SkillIcon
+                        iconUrl={skills[node.skillIndex].icon}
+                        position={[0, 0, 0.1]}
+                        opacity={iconOpacity}
+                    />
+                </group>
+            ))}
         </group>
     );
-
-    return (
-        <>
-            <group ref={group1Ref} position={[-8, 2, -4]}>
-                <BracketShape />
-            </group>
-            <group ref={group2Ref} position={[8, -2, -4]}>
-                <BracketShape flip />
-            </group>
-        </>
-    );
 }
 
-// Floating rings - representing connectivity and tech
+// Subtle floating rings
 function FloatingRings() {
     const ring1Ref = useRef<THREE.Mesh>(null);
     const ring2Ref = useRef<THREE.Mesh>(null);
-    const ring3Ref = useRef<THREE.Mesh>(null);
+    const [isDark, setIsDark] = useState(false);
+
+    useEffect(() => {
+        const checkTheme = () => {
+            setIsDark(document.documentElement.getAttribute('data-theme') === 'dark');
+        };
+        checkTheme();
+        const observer = new MutationObserver(checkTheme);
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        return () => observer.disconnect();
+    }, []);
 
     useFrame((state) => {
         const time = state.clock.getElapsedTime();
@@ -173,45 +213,38 @@ function FloatingRings() {
         const mouseOffsetY = (mouseState.y - 0.5) * -3;
 
         if (ring1Ref.current) {
-            ring1Ref.current.rotation.x = time * 0.08 + mouseOffsetY * 0.1;
-            ring1Ref.current.rotation.y = time * 0.12 + mouseOffsetX * 0.1;
+            ring1Ref.current.rotation.x = time * 0.06 + mouseOffsetY * 0.08;
+            ring1Ref.current.rotation.y = time * 0.08 + mouseOffsetX * 0.08;
         }
         if (ring2Ref.current) {
-            ring2Ref.current.rotation.x = time * -0.06 + mouseOffsetY * 0.08;
-            ring2Ref.current.rotation.z = time * 0.1 + mouseOffsetX * 0.08;
-        }
-        if (ring3Ref.current) {
-            ring3Ref.current.rotation.y = time * 0.04 + mouseOffsetX * 0.12;
-            ring3Ref.current.rotation.z = time * -0.08 + mouseOffsetY * 0.06;
+            ring2Ref.current.rotation.x = time * -0.04 + mouseOffsetY * 0.06;
+            ring2Ref.current.rotation.z = time * 0.06 + mouseOffsetX * 0.06;
         }
     });
 
+    const ringOpacity = isDark ? 0.06 : 0.04;
+
     return (
         <>
-            <mesh ref={ring1Ref} position={[0, 0, -10]}>
-                <torusGeometry args={[5, 0.015, 16, 100]} />
-                <meshBasicMaterial color="#4a9eff" transparent opacity={0.25} />
+            <mesh ref={ring1Ref} position={[0, 0, -12]}>
+                <torusGeometry args={[6, 0.01, 16, 100]} />
+                <meshBasicMaterial color="#FF6B35" transparent opacity={ringOpacity} />
             </mesh>
-            <mesh ref={ring2Ref} position={[3, 2, -8]}>
-                <torusGeometry args={[3.5, 0.012, 16, 80]} />
-                <meshBasicMaterial color="#7c3aed" transparent opacity={0.2} />
-            </mesh>
-            <mesh ref={ring3Ref} position={[-3, -2, -9]}>
-                <torusGeometry args={[4, 0.01, 16, 60]} />
-                <meshBasicMaterial color="#06b6d4" transparent opacity={0.18} />
+            <mesh ref={ring2Ref} position={[3, 2, -10]}>
+                <torusGeometry args={[4, 0.008, 16, 80]} />
+                <meshBasicMaterial color="#FF9500" transparent opacity={ringOpacity * 0.8} />
             </mesh>
         </>
     );
 }
 
-// Camera controller for mouse parallax
+// Camera controller for parallax
 function CameraController() {
     const { camera } = useThree();
 
     useFrame(() => {
-        // Subtle camera movement based on mouse
-        const targetX = (mouseState.x - 0.5) * 1.5;
-        const targetY = (mouseState.y - 0.5) * -1;
+        const targetX = (mouseState.x - 0.5) * 1.2;
+        const targetY = (mouseState.y - 0.5) * -0.8;
 
         camera.position.x += (targetX - camera.position.x) * 0.02;
         camera.position.y += (targetY - camera.position.y) * 0.02;
@@ -222,25 +255,38 @@ function CameraController() {
 }
 
 function Scene() {
+    const [isDark, setIsDark] = useState(false);
+
+    useEffect(() => {
+        const checkTheme = () => {
+            setIsDark(document.documentElement.getAttribute('data-theme') === 'dark');
+        };
+        checkTheme();
+        const observer = new MutationObserver(checkTheme);
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        return () => observer.disconnect();
+    }, []);
+
+    const bgColor = isDark ? '#0a0c10' : '#FAFAFA';
+    const fogColor = isDark ? '#0a0c10' : '#FAFAFA';
+
     return (
         <>
-            <color attach="background" args={['#0a0a0f']} />
-            <fog attach="fog" args={['#0a0a0f', 8, 30]} />
+            <color attach="background" args={[bgColor]} />
+            <fog attach="fog" args={[fogColor, 10, 35]} />
             <ambientLight intensity={0.4} />
             <CameraController />
-            <ParticleField />
+            <NetworkGraph nodeCount={18} />
             <FloatingRings />
-            <CodeBrackets />
         </>
     );
 }
 
 const ThreeBackground = () => {
-    // Use window-level event listener for better mouse tracking
     useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            mouseState.x = e.clientX / window.innerWidth;
-            mouseState.y = e.clientY / window.innerHeight;
+        const handleMouseMove = (event: MouseEvent) => {
+            mouseState.x = event.clientX / window.innerWidth;
+            mouseState.y = event.clientY / window.innerHeight;
         };
 
         window.addEventListener('mousemove', handleMouseMove);
@@ -253,22 +299,16 @@ const ThreeBackground = () => {
                 position: 'fixed',
                 top: 0,
                 left: 0,
-                width: '100vw',
-                height: '100vh',
+                width: '100%',
+                height: '100%',
                 zIndex: 0,
-                pointerEvents: 'none', // Allow clicks through to content
+                pointerEvents: 'none',
             }}
         >
             <Canvas
-                camera={{ position: [0, 0, 10], fov: 55 }}
-                dpr={[1, 1.5]}
-                frameloop="always"
-                gl={{
-                    antialias: false,
-                    alpha: false,
-                    powerPreference: 'high-performance',
-                }}
-                style={{ pointerEvents: 'auto' }}
+                camera={{ position: [0, 0, 12], fov: 60 }}
+                gl={{ antialias: true, alpha: true }}
+                dpr={[1, 2]}
             >
                 <Scene />
             </Canvas>

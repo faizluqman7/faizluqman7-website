@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import { ThemeProvider } from './context/ThemeContext';
 import HeroSection from './components/HeroSection';
 import AboutSection from "./components/About.tsx";
 import TechSection from "./components/Tech.tsx";
@@ -37,17 +38,18 @@ function App() {
     }, []);
 
     return (
-        <main className="fullpage-container">
-            <NavBar />
-            <ThreeBackground />
-            <HeroSection />
-            <AboutSection />
-            <TechSection />
-            <WorkExperience />
-            <ProjectsSection />
-            <Contact />
-
-        </main>
+        <ThemeProvider>
+            <main className="fullpage-container">
+                <NavBar />
+                <ThreeBackground />
+                <HeroSection />
+                <AboutSection />
+                <TechSection />
+                <WorkExperience />
+                <ProjectsSection />
+                <Contact />
+            </main>
+        </ThemeProvider>
     );
 }
 

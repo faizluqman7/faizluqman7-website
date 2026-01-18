@@ -1,183 +1,317 @@
 import { motion } from 'framer-motion';
 
-const AboutSection = () => (
-    <section id="about-me" className="section d-flex flex-column justify-content-center align-items-center text-center py-5">
-        <div style={{ width: '90%', maxWidth: '1100px', padding: '0 1rem' }}>
-            <motion.h3
-                className="mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-            >
-                About Me
-            </motion.h3>
+const AboutSection = () => {
+    const skills = {
+        'Frontend': ['React', 'TypeScript', 'JavaScript', 'HTML', 'CSS'],
+        'Backend': ['Java', 'Spring Boot', 'Node.js', 'Python', 'FastAPI', 'Flask'],
+        'Mobile': ['Swift', 'SwiftUI', 'Core Data', 'HealthKit'],
+        'Data & ML': ['PyTorch', 'TensorFlow', 'scikit-learn', 'OpenCV', 'pandas'],
+        'Tools': ['Git', 'Docker', 'PostgreSQL', 'GCP', 'GitHub Actions'],
+    };
 
-            <motion.div
-                className="imgcontainer"
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-            >
-                <img src="/face.jpeg" width="180" height="180" className="imgcenter img-circular" alt="Faiz Luqman" />
-            </motion.div>
+    return (
+        <section
+            id="about-me"
+            className="section d-flex flex-column justify-content-center align-items-center py-5"
+            style={{ minHeight: '100vh' }}
+        >
+            <div style={{ width: '90%', maxWidth: '1100px', padding: '0 1rem' }}>
+                {/* Section Header */}
+                <motion.div
+                    className="d-flex align-items-center gap-3 mb-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                >
+                    <span
+                        className="section-number"
+                        style={{
+                            fontFamily: 'var(--font-mono)',
+                            color: 'var(--accent-primary)',
+                            fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                        }}
+                    >
+                        01.
+                    </span>
+                    <h3
+                        style={{
+                            margin: 0,
+                            fontFamily: 'var(--font-serif)',
+                        }}
+                    >
+                        About Me
+                    </h3>
+                    <div
+                        style={{
+                            flex: 1,
+                            height: '1px',
+                            background: 'var(--border-subtle)',
+                            maxWidth: '300px',
+                        }}
+                    />
+                </motion.div>
 
-            <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                viewport={{ once: true }}
-                style={{
-                    color: 'var(--text-secondary)',
-                    maxWidth: '700px',
-                    margin: '0 auto 2rem',
-                    fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-                    lineHeight: 1.8,
-                }}
-            >
-                I'm a <strong style={{ color: 'var(--accent-primary)' }}>final year Computer Science student</strong> at
-                The University of Edinburgh, originally from <strong style={{ color: 'var(--accent-primary)' }}>Kuala Lumpur, Malaysia</strong>.
-                I'm passionate about building software that makes a difference, with a particular interest in
-                <strong style={{ color: 'var(--accent-primary)' }}> iOS development</strong>, <strong style={{ color: 'var(--accent-primary)' }}>AI/ML</strong>, and
-                <strong style={{ color: 'var(--accent-primary)' }}> full-stack web applications</strong>.
-            </motion.p>
-
-            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 g-lg-4">
-                {[
-                    {
-                        icon: '🎓',
-                        title: 'Education',
-                        content: 'BSc Computer Science at The University of Edinburgh (2022-2026). Final year student, on track for First-Class Honours.',
-                        delay: 0.1,
-                    },
-                    {
-                        icon: '💼',
-                        title: 'Experience',
-                        content: 'Previously interned at Pera (London startup) and Keysight Technologies. Passionate about building impactful software.',
-                        delay: 0.2,
-                    },
-                    {
-                        icon: '📱',
-                        title: 'Career Goals',
-                        content: 'Passionate full-stack developer (interest in mobile development). Currently building iOS apps such as HealthMY using Swift. Love the Apple ecosystem and design philosophy.',
-                        delay: 0.3,
-                    },
-                    {
-                        icon: '⚽',
-                        title: 'Extracurricular',
-                        content: 'I play football in my spare time! (Specifically the GK position). Also enjoy exploring Edinburgh, travelling, and keeping up with tech news.',
-                        delay: 0.4,
-                    },
-                ].map((item, idx) => (
+                {/* Two Column Layout */}
+                <div
+                    className="row g-4 g-lg-5 align-items-start"
+                >
+                    {/* Left Column - Text Content */}
                     <motion.div
-                        className="col"
-                        key={idx}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: item.delay }}
+                        className="col-12 col-lg-7"
+                        initial={{ opacity: 0, x: -30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
                         viewport={{ once: true }}
                     >
-                        <div
-                            className="card h-100"
-                            style={{
-                                background: 'var(--bg-card)',
-                                border: '1px solid var(--border-subtle)',
-                                padding: 'clamp(1rem, 2vw, 1.5rem)',
-                            }}
-                        >
-                            <div className="card-body p-0">
-                                <div style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', marginBottom: '0.75rem' }}>{item.icon}</div>
-                                <h5
-                                    className="card-title"
-                                    style={{
-                                        color: 'var(--text-primary)',
-                                        fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
-                                        marginBottom: '0.5rem',
-                                    }}
-                                >
-                                    {item.title}
+                        <div style={{ textAlign: 'left' }}>
+                            <p style={{
+                                color: 'var(--text-secondary)',
+                                fontSize: 'clamp(0.95rem, 2vw, 1.05rem)',
+                                lineHeight: 1.8,
+                                marginBottom: '1.25rem',
+                            }}>
+                                👨‍💻 I'm a <strong style={{ color: 'var(--text-primary)' }}>final year Computer Science student</strong> at
+                                <strong style={{ color: 'var(--accent-primary)' }}> The University of Edinburgh, United Kingdom</strong> 🇬🇧, originally from <strong style={{ color: 'var(--text-primary)' }}>Kuala Lumpur, Malaysia</strong> 🇲🇾.
+                            </p>
+
+                            <p style={{
+                                color: 'var(--text-secondary)',
+                                fontSize: 'clamp(0.95rem, 2vw, 1.05rem)',
+                                lineHeight: 1.8,
+                                marginBottom: '1.25rem',
+                            }}>
+                                I'm highly interested in <strong style={{ color: 'var(--text-primary)' }}>full-stack software development</strong> including
+                                front-end, back-end, and <strong style={{ color: 'var(--text-primary)' }}>mobile development (iOS)</strong>. Through my
+                                internships at <strong style={{ color: 'var(--accent-primary)' }}>Pera</strong> (London startup)
+                                and <strong style={{ color: 'var(--accent-primary)' }}>Keysight Technologies</strong>,
+                                along with various projects and hackathons, I've built a diverse technical skillset.
+                            </p>
+
+                            <p style={{
+                                color: 'var(--text-secondary)',
+                                fontSize: 'clamp(0.95rem, 2vw, 1.05rem)',
+                                lineHeight: 1.8,
+                                marginBottom: '1.5rem',
+                            }}>
+                            </p>
+
+                            {/* Skills Section */}
+                            <div style={{ marginTop: '2rem' }}>
+                                <h5 style={{
+                                    fontFamily: 'var(--font-sans)',
+                                    color: 'var(--text-primary)',
+                                    fontSize: 'clamp(0.95rem, 2vw, 1.05rem)',
+                                    marginBottom: '1rem',
+                                    fontWeight: 600,
+                                }}>
+                                    Technologies I work with:
                                 </h5>
-                                <p
-                                    className="card-text mb-0"
-                                    style={{
-                                        color: 'var(--text-secondary)',
-                                        fontSize: 'clamp(0.8rem, 1.8vw, 0.9rem)',
-                                        lineHeight: 1.6,
-                                    }}
-                                >
-                                    {item.content}
-                                </p>
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                    {Object.entries(skills).map(([category, items], idx) => (
+                                        <motion.div
+                                            key={category}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.4, delay: 0.3 + idx * 0.1 }}
+                                            viewport={{ once: true }}
+                                            style={{
+                                                display: 'flex',
+                                                flexWrap: 'wrap',
+                                                alignItems: 'center',
+                                                gap: '0.5rem',
+                                            }}
+                                        >
+                                            <span style={{
+                                                fontFamily: 'var(--font-mono)',
+                                                color: 'var(--accent-primary)',
+                                                fontSize: '0.8rem',
+                                                minWidth: '80px',
+                                            }}>
+                                                {category}:
+                                            </span>
+                                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                                                {items.map((skill) => (
+                                                    <span
+                                                        key={skill}
+                                                        style={{
+                                                            background: 'var(--glass-bg)',
+                                                            border: '1px solid var(--glass-border)',
+                                                            borderRadius: '6px',
+                                                            padding: '0.25rem 0.6rem',
+                                                            fontSize: '0.8rem',
+                                                            color: 'var(--text-secondary)',
+                                                            fontFamily: 'var(--font-mono)',
+                                                            transition: 'all 0.2s ease',
+                                                        }}
+                                                    >
+                                                        {skill}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </motion.div>
-                ))}
-            </div>
 
-            {/* Awards Section */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                viewport={{ once: true }}
-                style={{ marginTop: '2rem' }}
-            >
-                <h5 style={{ color: 'var(--text-primary)', marginBottom: '0.75rem', fontSize: 'clamp(1rem, 2vw, 1.1rem)' }}>
-                    🏆 Awards & Recognition
-                </h5>
-                <div style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '0.75rem',
-                    justifyContent: 'center',
-                }}>
-                    {[
-                        'Scholarship Holder (MARA WTU)',
-                        "A-Levels Top Achiever (3A*)",
-                        'Code For Good 2025 Participant',
-                    ].map((award, idx) => (
-                        <span
-                            key={idx}
+                    {/* Right Column - Image with Offset */}
+                    <motion.div
+                        className="col-12 col-lg-5"
+                        initial={{ opacity: 0, x: 30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        viewport={{ once: true }}
+                    >
+                        <div
                             style={{
-                                background: 'var(--bg-secondary)',
-                                border: '1px solid var(--border-subtle)',
-                                borderRadius: '20px',
-                                padding: '0.4rem 1rem',
-                                fontSize: 'clamp(0.75rem, 1.5vw, 0.85rem)',
-                                color: 'var(--text-secondary)',
+                                position: 'relative',
+                                maxWidth: '320px',
+                                margin: '0 auto',
                             }}
                         >
-                            {award}
-                        </span>
-                    ))}
-                </div>
-            </motion.div>
+                            {/* Accent Block (Behind) */}
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    top: '20px',
+                                    left: '20px',
+                                    width: '100%',
+                                    height: '100%',
+                                    border: '2px solid var(--accent-primary)',
+                                    borderRadius: '12px',
+                                    transition: 'all 0.3s ease',
+                                    zIndex: 0,
+                                }}
+                            />
 
-            <motion.div
-                className="mt-4"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                viewport={{ once: true }}
-            >
-                <a
-                    href="/2025%20RESUME%20WAN%20FAIZ%20LUQMAN.pdf"
-                    className="btn btn-outline-primary"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        padding: '10px 20px',
-                        fontSize: 'clamp(0.85rem, 1.8vw, 1rem)',
-                    }}
+                            {/* Image Container */}
+                            <div
+                                style={{
+                                    position: 'relative',
+                                    zIndex: 1,
+                                    borderRadius: '12px',
+                                    overflow: 'hidden',
+                                    background: 'var(--bg-secondary)',
+                                }}
+                            >
+                                <img
+                                    src="/face.jpeg"
+                                    alt="Faiz Luqman"
+                                    style={{
+                                        width: '100%',
+                                        height: 'auto',
+                                        display: 'block',
+                                        filter: 'grayscale(20%)',
+                                        transition: 'all 0.3s ease',
+                                    }}
+                                    onMouseOver={(e) => {
+                                        e.currentTarget.style.filter = 'grayscale(0%)';
+                                    }}
+                                    onMouseOut={(e) => {
+                                        e.currentTarget.style.filter = 'grayscale(20%)';
+                                    }}
+                                />
+                                {/* Overlay */}
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        background: 'rgba(100, 255, 218, 0.1)',
+                                        transition: 'all 0.3s ease',
+                                    }}
+                                    onMouseOver={(e) => {
+                                        e.currentTarget.style.background = 'transparent';
+                                    }}
+                                    onMouseOut={(e) => {
+                                        e.currentTarget.style.background = 'rgba(100, 255, 218, 0.1)';
+                                    }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Quick Stats */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.6 }}
+                            viewport={{ once: true }}
+                            style={{
+                                marginTop: '2rem',
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(2, 1fr)',
+                                gap: '1rem',
+                                maxWidth: '320px',
+                                margin: '2rem auto 0',
+                            }}
+                        >
+                            {[
+                                { icon: '🎓', label: 'Edinburgh', value: 'BSc CS 2026' },
+                                { icon: '📍', label: 'Location', value: 'Scotland, UK' },
+                            ].map((stat, idx) => (
+                                <div
+                                    key={idx}
+                                    className="glass-card"
+                                    style={{
+                                        padding: '1rem',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{stat.icon}</div>
+                                    <div style={{
+                                        fontSize: '0.7rem',
+                                        color: 'var(--text-muted)',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.05em',
+                                        marginBottom: '0.15rem',
+                                    }}>
+                                        {stat.label}
+                                    </div>
+                                    <div style={{
+                                        fontSize: '0.85rem',
+                                        color: 'var(--text-primary)',
+                                        fontWeight: 500,
+                                    }}>
+                                        {stat.value}
+                                    </div>
+                                </div>
+                            ))}
+                        </motion.div>
+                    </motion.div>
+                </div>
+
+                {/* Resume Button */}
+                <motion.div
+                    className="text-center mt-5"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.7 }}
+                    viewport={{ once: true }}
                 >
-                    <span>📄</span> View My Resume
-                </a>
-            </motion.div>
-        </div>
-    </section>
-);
+                    <a
+                        href="/WAN FAIZ CV 2026.pdf"
+                        className="btn btn-outline-primary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            padding: '12px 24px',
+                            fontSize: '0.95rem',
+                        }}
+                    >
+                        <span>📄</span> View My Resume
+                    </a>
+                </motion.div>
+            </div>
+        </section>
+    );
+};
 
 export default AboutSection;

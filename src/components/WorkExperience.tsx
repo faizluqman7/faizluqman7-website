@@ -6,18 +6,33 @@ import { motion } from 'framer-motion';
 gsap.registerPlugin(ScrollTrigger);
 
 const experiences = [
+  // FUTURE
   {
     title: 'BSc Computer Science Graduation',
-    company: 'University of Edinburgh',
+    company: 'The University of Edinburgh',
     date: 'July 2026',
     year: '2026',
     description: [
-      'Expected graduation with BSc (Hons) Computer Science.',
+      'Expected graduation in BSc (Hons) Computer Science degree.',
       'On track for First-Class Honours.',
     ],
     icon: '🎓',
-    accentColor: '#00d4ff',
+    accentColor: '#64ffda',
     isFuture: true,
+    category: 'education',
+  },
+  // EXTRACURRICULARS & ACTIVITIES
+  {
+    title: 'Head of Technology',
+    company: 'Edinburgh University Trading & Investment Club',
+    date: 'Aug 2025 - Present',
+    year: '2025',
+    description: [
+      'Led the technology infrastructure behind the UK\'s largest student-led investment fund (>£94,000 in AUM).',
+    ],
+    icon: '📊',
+    accentColor: '#10b981',
+    category: 'extracurricular',
   },
   {
     title: 'Lab Demonstrator',
@@ -29,33 +44,37 @@ const experiences = [
       'Helped students with their assignments and provided guidance on best practices.',
     ],
     icon: '💻',
-    accentColor: '#bd1797ff',
-    isFuture: false,
+    accentColor: '#bd1797',
+    category: 'extracurricular',
   },
   {
-    title: 'Code For Good Participant',
-    company: 'JPMorgan Chase',
+    title: 'Hackathon Participant',
+    company: 'JPMorgan Chase - Code For Good 2025',
     date: 'Oct 2025',
     year: '2025',
     description: [
-      'Participated in JPMorgan Chase\'s flagship hackathon, Code For Good in Glasgow, Scotland.',
+      'Participated in JPMorgan Chase\'s flagship hackathon in Glasgow, Scotland.',
       'Built technology solutions for non-profit organizations in a team environment.',
     ],
-    icon: '💻',
-    accentColor: '#10b981',
-    isFuture: false,
+    icon: '🏆',
+    accentColor: '#f59e0b',
+    category: 'extracurricular',
   },
+  // MAIN WORK EXPERIENCE
   {
     title: 'Software Engineering Intern',
-    company: 'Pera',
+    company: 'Pera (Pirum Group Ltd.)',
     date: 'Jun 2025 - Aug 2025',
     year: '2025',
     description: [
-      "Engineered the backend for Becca, an agent-based AI system helping users connect with each other.",
-      'Collaborated with founders to drive product direction at this London-based startup.',
+      'Developed RESTful microservices in Python (FastAPI), integrating with PostgreSQL and Qdrant for vector-based semantic matching.',
+      'Implemented SMS-based 2FA using Twilio API, reducing onboarding from 5 steps to 2.',
+      'Built Redis caching layer reducing query latency from ~10s to <100ms.',
+      'Integrated GitHub Actions CI/CD for automated testing and GCP deployment.',
     ],
     icon: '🚀',
     accentColor: '#7c3aed',
+    category: 'work',
   },
   {
     title: 'Software Engineering Intern',
@@ -63,12 +82,14 @@ const experiences = [
     date: 'Jun 2024 - Sep 2024',
     year: '2024',
     description: [
-      'Interned as a Technology Engineer / Software Engineer within the Design & Engineering Department, under the Knowledge Engineering Team',
-      'Designed and deployed a scalable approval-based request tracking system for 100+ weekly product service requests.',
-      'Engineered a batch data processing pipeline, reducing processing times by over 90%.',
+      'Developed a Request Tracking & Approval system within an Agile Scrum team.',
+      'Automated email-based workflows for 30+ Knowledge Engineers handling ~5,000 monthly requests.',
+      'Reduced resolution time from 5 days to 1 day.',
+      'Implemented batch data processing pipelines, reducing upload times from 30 minutes to 30 seconds.',
     ],
     icon: '⚙️',
     accentColor: '#06b6d4',
+    category: 'work',
   },
   {
     title: 'Event Volunteer',
@@ -81,19 +102,22 @@ const experiences = [
     ],
     icon: '🤝',
     accentColor: '#f59e0b',
+    category: 'extracurricular',
   },
+  // EDUCATION
   {
     title: 'Started BSc (Hons) Computer Science',
     company: 'University of Edinburgh',
     date: 'Sep 2022',
     year: '2022',
     description: [
-      'Started BSc (Hons) in Computer Science studies at the School of Informatics, University of Edinburgh.',
-      'Relevant Courses: Algorithms & Data Structures, Distributed Systems, Machine Learning, NLP, Software Engineering.',
+      'Started BSc (Hons) in Computer Science studies at the School of Informatics.',
+      'Relevant Courses: Algorithms & Data Structures, Distributed Systems, Machine Learning, NLP.',
       'Recipient of MARA World Top Universities (WTU) Education Sponsorship.',
     ],
     icon: '📚',
     accentColor: '#8b5cf6',
+    category: 'education',
   },
   {
     title: 'Cambridge A-Levels',
@@ -106,6 +130,7 @@ const experiences = [
     ],
     icon: '🏆',
     accentColor: '#ec4899',
+    category: 'education',
   },
 ];
 
@@ -115,28 +140,20 @@ const WorkExperience = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Check mobile on mount
     setIsMobile(window.innerWidth < 768);
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
     if (isMobile) return;
-
     const container = containerRef.current;
     const horizontal = horizontalRef.current;
-
     if (!container || !horizontal) return;
 
-    // Wait for layout to settle
     const timer = setTimeout(() => {
       const scrollWidth = horizontal.scrollWidth - window.innerWidth;
-
       if (scrollWidth <= 0) return;
 
       const tween = gsap.to(horizontal, {
@@ -171,21 +188,42 @@ const WorkExperience = () => {
         style={{ minHeight: 'auto', scrollBehavior: 'smooth' }}
       >
         <div style={{ width: '90%', maxWidth: '800px', margin: '0 auto', padding: '0 1rem' }}>
-          <h3 className="mb-2 text-center">
-            Professional Timeline
-          </h3>
-          <p style={{ color: 'var(--text-muted)', textAlign: 'center', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-            My journey so far
-          </p>
+          {/* Section Header */}
+          <motion.div
+            className="d-flex align-items-center gap-3 mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <span style={{
+              fontFamily: 'var(--font-mono)',
+              color: 'var(--accent-primary)',
+              fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+            }}>
+              03.
+            </span>
+            <h3 style={{ margin: 0, fontFamily: 'var(--font-serif)' }}>
+              My Journey
+            </h3>
+            <div style={{
+              flex: 1,
+              height: '1px',
+              background: 'var(--border-subtle)',
+              maxWidth: '200px',
+            }} />
+          </motion.div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {experiences.map((exp, idx) => (
-              <div
+              <motion.div
                 key={idx}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: idx * 0.05 }}
+                viewport={{ once: true }}
+                className="glass-card"
                 style={{
-                  background: 'var(--bg-card)',
-                  border: `1px solid ${exp.accentColor}30`,
-                  borderRadius: '12px',
                   padding: '1rem',
                   borderLeft: `3px solid ${exp.accentColor}`,
                 }}
@@ -194,6 +232,7 @@ const WorkExperience = () => {
                   <span style={{ fontSize: '1.25rem' }}>{exp.icon}</span>
                   <div style={{ flex: 1 }}>
                     <h5 style={{
+                      fontFamily: 'var(--font-sans)',
                       color: 'var(--text-primary)',
                       margin: 0,
                       fontSize: '0.9rem',
@@ -213,17 +252,36 @@ const WorkExperience = () => {
                   {exp.isFuture && (
                     <span style={{
                       background: exp.accentColor,
-                      color: '#000',
+                      color: 'var(--bg-primary)',
                       padding: '0.1rem 0.4rem',
                       borderRadius: '6px',
                       fontSize: '0.55rem',
                       fontWeight: 600,
+                      fontFamily: 'var(--font-mono)',
                     }}>
                       UPCOMING
                     </span>
                   )}
+                  {exp.category === 'work' && (
+                    <span style={{
+                      background: 'rgba(100, 255, 218, 0.15)',
+                      color: 'var(--accent-primary)',
+                      padding: '0.1rem 0.4rem',
+                      borderRadius: '6px',
+                      fontSize: '0.55rem',
+                      fontWeight: 600,
+                      fontFamily: 'var(--font-mono)',
+                    }}>
+                      WORK
+                    </span>
+                  )}
                 </div>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.7rem', marginBottom: '0.4rem' }}>
+                <p style={{
+                  fontFamily: 'var(--font-mono)',
+                  color: 'var(--text-muted)',
+                  fontSize: '0.7rem',
+                  marginBottom: '0.4rem'
+                }}>
                   {exp.date}
                 </p>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -234,11 +292,11 @@ const WorkExperience = () => {
                       lineHeight: 1.4,
                       marginBottom: '0.15rem',
                     }}>
-                      • {desc}
+                      ▹ {desc}
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -269,11 +327,24 @@ const WorkExperience = () => {
           textAlign: 'center',
         }}
       >
-        <h3 className="mb-2" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
-          Professional Timeline
-        </h3>
-        <p style={{ color: 'var(--text-muted)', fontSize: 'clamp(0.8rem, 1.5vw, 0.9rem)' }}>
-          Scroll to explore my journey →
+        <div className="d-flex align-items-center justify-content-center gap-3 mb-2">
+          <span style={{
+            fontFamily: 'var(--font-mono)',
+            color: 'var(--accent-primary)',
+            fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+          }}>
+            03.
+          </span>
+          <h3 style={{ margin: 0, fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
+            My Journey
+          </h3>
+        </div>
+        <p style={{
+          color: 'var(--text-muted)',
+          fontSize: 'clamp(0.8rem, 1.5vw, 0.9rem)',
+          fontFamily: 'var(--font-mono)',
+        }}>
+          Scroll to explore →
         </p>
       </div>
 
@@ -334,10 +405,7 @@ const WorkExperience = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
-              style={{
-                fontSize: 'clamp(4rem, 15vw, 8rem)',
-                marginBottom: '1rem',
-              }}
+              style={{ fontSize: 'clamp(4rem, 15vw, 8rem)', marginBottom: '1rem' }}
             >
               🚀
             </motion.div>
@@ -349,12 +417,9 @@ const WorkExperience = () => {
 
         {/* Experience Cards - Grouped by Year */}
         {(() => {
-          // Group experiences by year
           const groupedByYear: { [key: string]: typeof experiences } = {};
           experiences.forEach(exp => {
-            if (!groupedByYear[exp.year]) {
-              groupedByYear[exp.year] = [];
-            }
+            if (!groupedByYear[exp.year]) groupedByYear[exp.year] = [];
             groupedByYear[exp.year].push(exp);
           });
 
@@ -395,6 +460,7 @@ const WorkExperience = () => {
                   {/* Year */}
                   <div
                     style={{
+                      fontFamily: 'var(--font-serif)',
                       fontSize: 'clamp(3rem, 8vw, 6rem)',
                       fontWeight: 900,
                       color: primaryColor,
@@ -419,50 +485,50 @@ const WorkExperience = () => {
                     {yearExperiences.map((exp, expIdx) => (
                       <div
                         key={expIdx}
+                        className="glass-card"
                         style={{
-                          background: 'var(--bg-card)',
-                          backdropFilter: 'blur(20px)',
-                          border: `1px solid ${exp.accentColor}25`,
-                          borderRadius: '16px',
                           padding: 'clamp(0.75rem, 1.5vw, 1.25rem)',
                           flex: yearExperiences.length === 1 ? 1 : '1 1 45%',
                           minWidth: yearExperiences.length > 1 ? '280px' : 'auto',
-                          boxShadow: `0 0 20px ${exp.accentColor}10`,
+                          borderLeft: `3px solid ${exp.accentColor}`,
                           position: 'relative',
-                          overflow: 'hidden',
                         }}
                       >
-                        {/* Glow accent */}
-                        <div
-                          style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '3px',
-                            height: '100%',
-                            background: `linear-gradient(to bottom, ${exp.accentColor}, transparent)`,
-                            borderRadius: '3px 0 0 3px',
-                          }}
-                        />
-
-                        {/* Future badge */}
-                        {exp.isFuture && (
-                          <span
-                            style={{
-                              position: 'absolute',
-                              top: '0.75rem',
-                              right: '0.75rem',
+                        {/* Badges */}
+                        <div style={{
+                          position: 'absolute',
+                          top: '0.75rem',
+                          right: '0.75rem',
+                          display: 'flex',
+                          gap: '0.5rem',
+                        }}>
+                          {exp.isFuture && (
+                            <span style={{
                               background: exp.accentColor,
-                              color: '#000',
+                              color: 'var(--bg-primary)',
                               padding: '0.15rem 0.5rem',
-                              borderRadius: '10px',
+                              borderRadius: '6px',
                               fontSize: '0.6rem',
                               fontWeight: 600,
-                            }}
-                          >
-                            UPCOMING
-                          </span>
-                        )}
+                              fontFamily: 'var(--font-mono)',
+                            }}>
+                              UPCOMING
+                            </span>
+                          )}
+                          {exp.category === 'work' && (
+                            <span style={{
+                              background: 'rgba(100, 255, 218, 0.15)',
+                              color: 'var(--accent-primary)',
+                              padding: '0.15rem 0.5rem',
+                              borderRadius: '6px',
+                              fontSize: '0.6rem',
+                              fontWeight: 600,
+                              fontFamily: 'var(--font-mono)',
+                            }}>
+                              INTERNSHIP
+                            </span>
+                          )}
+                        </div>
 
                         {/* Icon */}
                         <div style={{ fontSize: 'clamp(1rem, 2vw, 1.5rem)', marginBottom: '0.4rem' }}>
@@ -470,41 +536,37 @@ const WorkExperience = () => {
                         </div>
 
                         {/* Title */}
-                        <h4
-                          style={{
-                            color: 'var(--text-primary)',
-                            fontWeight: 700,
-                            fontSize: 'clamp(0.85rem, 1.5vw, 1.1rem)',
-                            marginBottom: '0.15rem',
-                          }}
-                        >
+                        <h4 style={{
+                          fontFamily: 'var(--font-sans)',
+                          color: 'var(--text-primary)',
+                          fontWeight: 700,
+                          fontSize: 'clamp(0.85rem, 1.5vw, 1.1rem)',
+                          marginBottom: '0.15rem',
+                        }}>
                           {exp.title}
                         </h4>
 
                         {/* Company */}
-                        <div
-                          style={{
-                            color: exp.accentColor,
-                            fontWeight: 600,
-                            fontSize: 'clamp(0.75rem, 1.3vw, 0.85rem)',
-                            marginBottom: '0.2rem',
-                          }}
-                        >
+                        <div style={{
+                          color: exp.accentColor,
+                          fontWeight: 600,
+                          fontSize: 'clamp(0.75rem, 1.3vw, 0.85rem)',
+                          marginBottom: '0.2rem',
+                        }}>
                           @ {exp.company}
                         </div>
 
                         {/* Date */}
-                        <div
-                          style={{
-                            color: 'var(--text-muted)',
-                            fontSize: 'clamp(0.65rem, 1.1vw, 0.75rem)',
-                            marginBottom: '0.5rem',
-                          }}
-                        >
+                        <div style={{
+                          fontFamily: 'var(--font-mono)',
+                          color: 'var(--text-muted)',
+                          fontSize: 'clamp(0.65rem, 1.1vw, 0.75rem)',
+                          marginBottom: '0.5rem',
+                        }}>
                           {exp.date}
                         </div>
 
-                        {/* Description - show fewer items when grouped */}
+                        {/* Description */}
                         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                           {exp.description.slice(0, yearExperiences.length > 1 ? 2 : 3).map((desc, i) => (
                             <li
@@ -518,14 +580,12 @@ const WorkExperience = () => {
                                 fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)',
                               }}
                             >
-                              <span
-                                style={{
-                                  position: 'absolute',
-                                  left: 0,
-                                  color: exp.accentColor,
-                                }}
-                              >
-                                →
+                              <span style={{
+                                position: 'absolute',
+                                left: 0,
+                                color: exp.accentColor,
+                              }}>
+                                ▹
                               </span>
                               {desc}
                             </li>
@@ -555,10 +615,7 @@ const WorkExperience = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
-            style={{
-              textAlign: 'center',
-              color: 'var(--text-secondary)',
-            }}
+            style={{ textAlign: 'center', color: 'var(--text-secondary)' }}
           >
             <div style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', marginBottom: '0.75rem' }}>🌟</div>
             <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}>And the journey continues...</p>
