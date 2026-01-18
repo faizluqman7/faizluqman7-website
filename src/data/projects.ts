@@ -6,9 +6,26 @@ export interface Project {
     tech?: string[];
     isOngoing?: boolean;
     isFeatured?: boolean;
+    image?: string;
+    isHighlighted?: boolean;
 }
 
 export const projects: Project[] = [
+
+    {
+        title: '📚 AI-Driven Coursework Planning System',
+        description: [
+            'Developed a study platform using React + FastAPI with multimodal RAG using Gemini 2.0 + LangChain.',
+            'Integrated Qdrant Cloud for efficient multimodal semantic retrieval with <1s latency.',
+            'JWT-based auth with PostgreSQL reduced login times by 50%.',
+        ],
+        link: 'https://github.com/faizluqman7/courseworkbuddy',
+        date: '2025',
+        tech: ['React', 'TypeScript', 'PostgreSQL', 'LangChain', 'Qdrant'],
+        image: '/courseworkbuddy.png',
+        isHighlighted: true,
+        isFeatured: true,
+    },
     // FEATURED PROJECTS (from CV)
     {
         title: '🔗 Distributed Compute Cluster & Storage Engine',
@@ -21,18 +38,7 @@ export const projects: Project[] = [
         tech: ['Python', 'gRPC', 'Distributed Systems'],
         isFeatured: true,
     },
-    {
-        title: '📚 AI-Driven Coursework Planning System',
-        description: [
-            'Developed a study platform using React + FastAPI with multimodal RAG using Gemini 2.0 + LangChain.',
-            'Integrated Qdrant Cloud for efficient multimodal semantic retrieval with <1s latency.',
-            'JWT-based auth with PostgreSQL reduced login times by 50%.',
-        ],
-        link: 'https://github.com/faizluqman7',
-        date: '2025',
-        tech: ['React', 'TypeScript', 'PostgreSQL', 'LangChain', 'Qdrant'],
-        isFeatured: true,
-    },
+
     {
         title: '⚡ Sparse Matrix & Tensor Multiplication Engine',
         description: [

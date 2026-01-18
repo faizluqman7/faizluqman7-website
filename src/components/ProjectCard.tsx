@@ -41,6 +41,27 @@ const ProjectCard = ({
             }}
             transition={{ duration: 0.2 }}
         >
+            {/* Highlighted Project Image */}
+            {project.isHighlighted && project.image && (
+                <div style={{
+                    marginBottom: '1.5rem',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.2)',
+                }}>
+                    <img
+                        src={project.image}
+                        alt={project.title}
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                            display: 'block',
+                            objectFit: 'cover',
+                        }}
+                    />
+                </div>
+            )}
+
             <div className="card-body text-start p-0">
                 {/* Header Row */}
                 <div style={{
