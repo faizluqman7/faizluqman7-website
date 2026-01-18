@@ -235,8 +235,6 @@ function ConnectionLines({
 }) {
     const { size } = useThree();
     const [isDark, setIsDark] = useState(false);
-    const baseLineRef = useRef<LineSegments2>(null);
-    const highlightLineRef = useRef<LineSegments2>(null);
 
     useEffect(() => {
         const checkTheme = () => {
