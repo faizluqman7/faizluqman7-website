@@ -1,34 +1,107 @@
-/* Import Inter font - must be at the very top */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+/* Import Fonts - Serif + Sans-Serif + Mono mix */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
 
 /* ============================================
-   DARK THEME - Lando Norris Inspired
+   APPLE-INSPIRED THEME - Light Mode (Default)
    ============================================ */
 
 :root {
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #12121a;
-  --bg-card: rgba(20, 20, 30, 0.8);
-  --bg-card-hover: rgba(30, 30, 45, 0.9);
+  /* Background - Light Mode */
+  --bg-primary: #FAFAFA;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F5F5F7;
+  --bg-card: rgba(255, 255, 255, 0.8);
+  --bg-card-hover: rgba(255, 255, 255, 0.95);
 
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0b0;
-  --text-muted: #6b6b7b;
+  /* Text - Light Mode */
+  --text-primary: #1D1D1F;
+  --text-secondary: #6E6E73;
+  --text-muted: #86868B;
 
-  --accent-primary: #00d4ff;
-  --accent-secondary: #297dcb;
-  --accent-gradient: linear-gradient(135deg, #00d4ff, #227695);
+  /* Accent - Apple Orange/Red Gradient */
+  --accent-primary: #FF6B35;
+  --accent-secondary: #FF3B30;
+  --accent-tertiary: #FF9500;
+  --accent-gradient: linear-gradient(135deg, #FF6B35 0%, #FF3B30 50%, #FF9500 100%);
 
-  --glow-primary: 0 0 20px rgba(0, 212, 255, 0.3);
-  --glow-secondary: 0 0 20px rgba(124, 58, 237, 0.3);
-  --glow-strong: 0 0 40px rgba(0, 212, 255, 0.5), 0 0 80px rgba(124, 58, 237, 0.3);
+  /* Liquid Glass Effects - Light Mode */
+  --glass-bg: rgba(0, 0, 0, 0.02);
+  --glass-bg-hover: rgba(0, 0, 0, 0.04);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  --glass-border-hover: rgba(0, 0, 0, 0.12);
+  --glass-blur: blur(20px);
+  --glass-blur-strong: blur(40px);
 
-  --border-subtle: rgba(255, 255, 255, 0.1);
-  --border-glow: rgba(0, 212, 255, 0.3);
+  /* Glows - Light Mode (subtle) */
+  --glow-primary: 0 0 20px rgba(255, 107, 53, 0.15);
+  --glow-secondary: 0 0 20px rgba(255, 59, 48, 0.15);
+  --glow-strong: 0 0 40px rgba(255, 107, 53, 0.2), 0 0 80px rgba(255, 149, 0, 0.1);
 
-  --transition-fast: 0.2s ease;
-  --transition-medium: 0.3s ease;
-  --transition-slow: 0.5s ease;
+  /* Borders */
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-glow: rgba(255, 107, 53, 0.3);
+
+  /* Transitions */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Typography */
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Fira Code', 'SF Mono', Consolas, monospace;
+
+  /* Network Graph Colors */
+  --network-node: rgba(255, 107, 53, 0.6);
+  --network-line: rgba(255, 107, 53, 0.15);
+  --network-text: rgba(29, 29, 31, 0.4);
+}
+
+/* ============================================
+   DARK MODE
+   ============================================ */
+
+[data-theme="dark"] {
+  /* Background - Dark Mode */
+  --bg-primary: #0a0c10;
+  --bg-secondary: #12151c;
+  --bg-tertiary: #1a1e28;
+  --bg-card: rgba(18, 21, 28, 0.7);
+  --bg-card-hover: rgba(26, 30, 40, 0.85);
+
+  /* Text - Dark Mode */
+  --text-primary: #e6f1ff;
+  --text-secondary: #8892b0;
+  --text-muted: #5a6580;
+
+  /* Liquid Glass Effects - Dark Mode */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-bg-hover: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-hover: rgba(255, 255, 255, 0.15);
+
+  /* Glows - Dark Mode (more vibrant) */
+  --glow-primary: 0 0 20px rgba(255, 107, 53, 0.25);
+  --glow-secondary: 0 0 20px rgba(255, 59, 48, 0.25);
+  --glow-strong: 0 0 40px rgba(255, 107, 53, 0.35), 0 0 80px rgba(255, 149, 0, 0.2);
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(255, 107, 53, 0.4);
+
+  /* Network Graph Colors - Dark Mode */
+  --network-node: rgba(255, 107, 53, 0.7);
+  --network-line: rgba(255, 107, 53, 0.2);
+  --network-text: rgba(230, 241, 255, 0.3);
+}
+
+/* Theme transition */
+body,
+body * {
+  transition: background-color var(--transition-medium),
+    color var(--transition-medium),
+    border-color var(--transition-medium),
+    box-shadow var(--transition-medium);
 }
 
 #root {
@@ -47,31 +120,39 @@ body {
   color: var(--text-primary);
   margin: 0;
   padding: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--font-sans);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1,
 h2,
-h3,
-h4,
-h5,
-h6 {
+h3 {
+  font-family: var(--font-serif);
   color: var(--text-primary);
   font-weight: 700;
   letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+h4,
+h5,
+h6 {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 h3 {
-  font-size: 2.5rem;
-  color: var(--text-primary);
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
 }
 
 p {
   font-size: 1rem;
   line-height: 1.7;
   color: var(--text-secondary);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--font-sans);
 }
 
 a {
@@ -82,7 +163,19 @@ a {
 
 a:hover {
   color: var(--accent-secondary);
-  text-shadow: var(--glow-primary);
+}
+
+/* Monospace accent text (for // prefixes) */
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* Section number styling */
+.section-number {
+  font-family: var(--font-mono);
+  color: var(--accent-primary);
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 /* ============================================
@@ -128,13 +221,35 @@ a:hover {
   color: var(--text-secondary);
 }
 
+/* Liquid Glass Card - Apple-inspired */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  transition: all var(--transition-medium);
+}
+
+.glass-card:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    var(--glow-primary);
+}
+
 /* ============================================
    BUTTONS
    ============================================ */
 
 button,
 .btn {
-  font-family: 'Inter', monospace;
+  font-family: var(--font-sans);
   font-weight: 600;
   padding: 12px 28px;
   border-radius: 8px;
