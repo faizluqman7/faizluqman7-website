@@ -8,17 +8,31 @@ gsap.registerPlugin(ScrollTrigger);
 const experiences = [
   // FUTURE
   {
+    title: 'Technology Developer (Graduate Scheme)',
+    company: 'Barclays',
+    date: 'Starting Aug 2026',
+    year: '2026',
+    description: [
+      'Incoming Technology Developer on Barclays\' 2-year graduate scheme.',
+      'Based in Glasgow, Scotland.',
+    ],
+    icon: '🦅',
+    accentColor: '#00AEEF',
+    isFuture: true,
+    category: 'work',
+    logo: '/barclays.svg',
+    link: 'https://home.barclays/',
+  },
+  {
     title: 'BSc Computer Science Graduation',
     company: 'The University of Edinburgh',
     date: 'July 2026',
     year: '2026',
     description: [
-      'Expected graduation in BSc (Hons) Computer Science degree.',
-      'On track for First-Class Honours.',
+      'Graduated with First-Class Honours in BSc (Hons) Computer Science.',
     ],
     icon: '🎓',
     accentColor: '#64ffda',
-    isFuture: true,
     category: 'education',
   },
   // EXTRACURRICULARS & ACTIVITIES
@@ -581,7 +595,7 @@ const WorkExperience = () => {
                               fontWeight: 600,
                               fontFamily: 'var(--font-mono)',
                             }}>
-                              INTERNSHIP
+                              WORK
                             </span>
                           )}
                         </div>
