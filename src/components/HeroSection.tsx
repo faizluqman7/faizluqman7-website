@@ -105,9 +105,9 @@ const HeroSection = ({ onOpenGraph }: HeroSectionProps) => {
                             lineHeight: 1.4,
                         }}
                     >
-                        Computer Science Student{' '}
+                        Computer Science Graduate{' '}
                         <span style={{ color: 'var(--accent-primary)' }}>|</span>{' '}
-                        Aspiring Software Engineer
+                        Incoming Technology Developer @ Barclays
                     </motion.h2>
 
                     {/* Description */}
@@ -123,7 +123,8 @@ const HeroSection = ({ onOpenGraph }: HeroSectionProps) => {
                             marginBottom: '2rem',
                         }}
                     >
-                        Final year Computer Science student at The University of Edinburgh.
+                        Computer Science graduate (First-Class Honours) from The University of Edinburgh,
+                        and incoming Technology Developer at Barclays.
                         Passionate about full-stack development, and building software that makes a difference.
                     </motion.p>
 

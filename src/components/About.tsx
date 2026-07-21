@@ -71,8 +71,9 @@ const AboutSection = () => {
                                 lineHeight: 1.8,
                                 marginBottom: '1.25rem',
                             }}>
-                                👨‍💻 I'm a <strong style={{ color: 'var(--text-primary)' }}>final year Computer Science student</strong> at
+                                👨‍💻 I'm a <strong style={{ color: 'var(--text-primary)' }}>Computer Science graduate (BSc Hons, First-Class Honours)</strong> from
                                 <strong style={{ color: 'var(--accent-primary)' }}> The University of Edinburgh, United Kingdom</strong> 🇬🇧, originally from <strong style={{ color: 'var(--text-primary)' }}>Kuala Lumpur, Malaysia</strong> 🇲🇾.
+                                I'm an incoming <strong style={{ color: 'var(--text-primary)' }}>Technology Developer</strong> at <strong style={{ color: 'var(--accent-primary)' }}>Barclays</strong> in Glasgow, starting August 2026.
                             </p>
 
                             <p style={{
@@ -251,7 +252,7 @@ const AboutSection = () => {
                             }}
                         >
                             {[
-                                { icon: '🎓', label: 'Edinburgh', value: 'BSc CS 2026' },
+                                { icon: '🎓', label: 'Edinburgh', value: 'First-Class Honours' },
                                 { icon: '📍', label: 'Location', value: 'Scotland, UK' },
                             ].map((stat, idx) => (
                                 <div
